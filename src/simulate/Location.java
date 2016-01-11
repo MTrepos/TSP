@@ -22,6 +22,14 @@ public class Location {
 		this.name = name;
 	}
 	
+	public int getType(){
+		return this.type;
+	}
+	
+	public Point getPoint(){
+		return p;
+	}	
+	
 	@Override
 	public boolean equals(Object o){
 		if(o instanceof Location){
@@ -34,9 +42,5 @@ public class Location {
 	@Override
 	public int hashCode(){
 		return p.hashCode();
-	}
-	
-	Point getPoint(){
-		return p;
 	}
 }

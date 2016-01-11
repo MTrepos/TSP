@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -28,7 +29,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	
 	public MainFrame(){
 		//Modelの初期化
-		this.map = new Map(600, 450);
+		this.map = new Map(60, 45);
 		
 		//メインフレーム
 		this.setTitle("TSP");
@@ -111,15 +112,14 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	}
 
 	@Override
-	public void addLocation(Location l) {
-		map.addLocation(l);
+	public void setLocationType(Location l, int type) {
+		map.setLocationType(l, type);
 		this.mapPanel.repaint();
 	}
 
 	@Override
-	public void removeLocation(Location l) {
-		map.removeLocation(l);
-		this.mapPanel.repaint();
+	public ArrayList<Location> getLocationList() {
+		return map.getLocationList();
 	}
 
 }

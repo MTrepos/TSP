@@ -3,12 +3,10 @@ package gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -16,7 +14,8 @@ import simulate.Location;
 
 class MapPanel extends JPanel implements MouseListener{
 	
-	public static final int INTERVAL = 15;
+	public static final int START_POINT_OFFSET = 10;
+	public static final int INTERVAL = 20;
 	private static final long serialVersionUID = 1L;
 	
 	MapMediator mapMediator;
@@ -27,37 +26,45 @@ class MapPanel extends JPanel implements MouseListener{
 		this.setVisible(true);
 		this.addMouseListener(this);
 		
-		this.mapImage = new BufferedImage(1280, 720, BufferedImage.TYPE_3BYTE_BGR);
+		this.mapImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_3BYTE_BGR);
 	}	
 
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		
-		//画面クリア
+		//マップの描画
 		try{
+			//オフスクリーン(BufferedImage)への描画
 			Graphics2D ig2 = this.mapImage.createGraphics();
 			
 			ig2.setBackground(Color.WHITE);
-			ig2.clearRect(0, 0, mapImage.getWidth(), mapImage.getHeight());
+			ig2.clearRect(0, 0, mapImage.getWidth(), mapImage.getHeight());			
 			
-			ig2.setColor(Color.BLACK);
-			for (int i = 0; i < this.getWidth(); i++) {
-				for (int j = 0; j < this.getHeight(); j++) {
-					ig2.fillRect(i*INTERVAL, j*INTERVAL, 1, 1);
-				}
-			}
-			
-			ig2.setColor(Color.BLUE);
-			for (int i = 0; i < this.getWidth(); i++) {
-				for (int j = 0; j < this.getHeight(); j++) {
-					if(mapMediator.existsLocation(new Location(i, j, Location.TYPE_NORMAL_LOCATION))){
-						ig2.fillRect(i*INTERVAL-2, j*INTERVAL-2, 5 ,5);
-					}
+			ArrayList<Location> locationList = mapMediator.getLocationList();
+			for(Location l : locationList) {
+				int i = START_POINT_OFFSET + l.getPoint().x * INTERVAL;
+				int j = START_POINT_OFFSET + l.getPoint().y * INTERVAL;
+				switch(l.getType()){
+					case Location.TYPE_NORMAL_LOCATION:
+						ig2.setColor(Color.BLACK);
+						ig2.fillRect(i, j, 1, 1);
+						break;
+					case Location.TYPE_PATH_LOCATION:
+						ig2.setColor(Color.BLUE);
+						ig2.fillRect(i-2, j-2, 5, 5);
+						break;
+					case Location.TYPE_EXCLUDE_LOCATION:
+						ig2.setColor(Color.RED);
+						ig2.fillRect(i-3, j-3, 7, 7);
+						break;
+					default:
+						break;
 				}
 			}
 			
 			ig2.dispose();
+			
 		} catch(NullPointerException ne){
 			System.out.println("mapImage is null");
 		}
@@ -71,7 +78,7 @@ class MapPanel extends JPanel implements MouseListener{
 		this.mapMediator = mapMediator;
 	}
 
-	private void removeAllMouseListener(){
+/*	private void removeAllMouseListener(){
 		for(MouseListener ml : getMouseListeners()){
 			removeMouseListener(ml);
 		}
@@ -88,7 +95,8 @@ class MapPanel extends JPanel implements MouseListener{
         addMouseMotionListener(ma);
         addMouseWheelListener(ma);
 	}
-
+*/
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		int x = e.getPoint().x;
@@ -98,15 +106,10 @@ class MapPanel extends JPanel implements MouseListener{
 		if( ((x%INTERVAL)<=8||(x%INTERVAL)>=7) && ((y%INTERVAL)<=8||(y%INTERVAL)>=7)){
 			int mx = x/INTERVAL;
 			int my = y/INTERVAL;
+			System.out.println("clicked map point: (" + mx + ", " + my + ")");
 			Location l = new Location(mx, my, Location.TYPE_NORMAL_LOCATION);
 			
-			if(mapMediator.existsLocation(l)){
-				this.mapMediator.removeLocation(l);
-				System.out.println("exists location then remove (" + mx + ", " + my + ")");
-			}else {
-				this.mapMediator.addLocation(l);
-				System.out.println("not exists location so add (" + mx + ", " + my + ")");
-			}
+			mapMediator.setLocationType(l, Location.TYPE_PATH_LOCATION);
 		}
 		
 	}

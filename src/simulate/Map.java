@@ -20,26 +20,31 @@ public class Map {
 		}
 	}
 	
+	public ArrayList<Location> getLocationList(){
+		return this.locationList;
+	}
+	
 	public boolean existsLocation(Location l){
 		return locationList.contains(l);
 	}
 
-	public void addLocation(Location l) {
+	public void setLocationType(Location l, int type) {
 		if(isInRange(l)){
-			locationList.add(l);
+			for(Location ll : locationList){
+				if(ll.equals(l)){
+					ll.type = type;
+					System.out.println("set TYPE_PATH_LOCATION : " + type);
+					return;
+				}
+			}
 		}
-	}
-
-	public void removeLocation(Location l) {
-		if(isInRange(l)){
-			locationList.remove(l);
-		}
+		System.out.println("out of range");
 	}
 	
 	private boolean isInRange(Location l){
 		int x = l.p.x;
 		int y = l.p.y;
-		return ((x>=0) && (x<=mw) && (y>=0) && (y<=mh)) ? true : false;
+		return (x>=0) && (x<=mw) && (y>=0) && (y<=mh);
 	}
 	
 }
