@@ -109,7 +109,23 @@ class MapPanel extends JPanel implements MouseListener{
 			System.out.println("clicked map point: (" + mx + ", " + my + ")");
 			Location l = new Location(mx, my, Location.TYPE_NORMAL_LOCATION);
 			
-			mapMediator.setLocationType(l, Location.TYPE_PATH_LOCATION);
+			switch(e.getButton()){
+				//左クリック→経路地点化
+				case MouseEvent.BUTTON1:
+					mapMediator.setLocationType(l, Location.TYPE_PATH_LOCATION);
+					System.out.println("cahenged type : TYPE_PATH_LOCATION");
+					break;
+				
+				//右クリック→ノーマル地点化
+				case MouseEvent.BUTTON3:
+					mapMediator.setLocationType(l, Location.TYPE_NORMAL_LOCATION);
+					System.out.println("cahenged type : TYPE_NORMAL_LOCATION");
+					break;
+					
+				default:
+					break;
+			}
+			
 		}
 		
 	}

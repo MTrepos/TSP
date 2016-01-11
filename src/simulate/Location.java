@@ -1,8 +1,9 @@
 package simulate;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public class Location {
+public class Location implements Serializable{
 	
 	public static final int TYPE_NORMAL_LOCATION = 0;
 	public static final int TYPE_PATH_LOCATION = 1;

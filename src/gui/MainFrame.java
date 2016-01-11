@@ -3,8 +3,15 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -47,6 +54,11 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		itemNew.setActionCommand("newMap");
 		itemNew.addActionListener(this);
 		menuFile.add(itemNew);
+		
+		JMenuItem itemLoad = new JMenuItem("Load Map...");
+		itemLoad.setActionCommand("loadMap");
+		itemLoad.addActionListener(this);
+		menuFile.add(itemLoad);
 		
 		JMenuItem itemSave = new JMenuItem("Save Map...");
 		itemSave.setActionCommand("saveMap");
@@ -94,15 +106,103 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		switch(command){
 		case "newMap":
 			System.out.println("newMap");
+			this.mapPanel.repaint();
 			break;
+			
+		case "loadMap":
+			System.out.println("loadMap");
+			loadMap();
+			this.mapPanel.repaint();
+			break;
+			
 		case "saveMap":
 			System.out.println("saveMap");
+			saveMap();
 			break;
+			
 		case "run":
 			System.out.println("run");
 			break;
+			
 		default:
 			break;
+		}
+	}
+	
+	private void saveMap(){
+		
+		JFileChooser fileChooser = new JFileChooser();
+		int selected =  fileChooser.showSaveDialog(this);
+		
+		switch(selected){
+			case JFileChooser.APPROVE_OPTION: //保存ボタン
+				//直列化して保存する
+				try{
+					File saveFile = new File(fileChooser.getSelectedFile().toString() + ".tspmap");
+
+					FileOutputStream fos = new FileOutputStream(saveFile);
+					ObjectOutputStream oos = new ObjectOutputStream(fos);
+					oos.writeObject(map);
+					
+					oos.flush();
+					
+					oos.close();
+					fos.close();
+					
+					System.out.println("system has saved tspmap...");
+				
+				}catch (IOException io){
+					System.out.println("IOException occured");
+				}
+				break;
+				
+			case JFileChooser.CANCEL_OPTION: //取り消し, ×ボタン
+				
+				break;
+				
+			case JFileChooser.ERROR_OPTION: //エラー発生時
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	private void loadMap(){
+		JFileChooser fileChooser = new JFileChooser();
+		int selected = fileChooser.showOpenDialog(this);
+		
+		switch(selected){
+			case JFileChooser.APPROVE_OPTION: //開くボタンが選択された
+				//直列化されたファイルを読み込む
+				try{
+					File loadFile = fileChooser.getSelectedFile();
+					
+					FileInputStream fis = new FileInputStream(loadFile);
+					ObjectInputStream ois = new ObjectInputStream(fis);
+					this.map = (Map)ois.readObject();
+					
+					ois.close();
+					fis.close();
+					
+					System.out.println("system has loaded tspmap...");
+					
+				} catch(IOException e){
+					System.out.println("IOException occured");
+					
+				} catch(ClassNotFoundException cnfe){
+					System.out.println("maybe not tspmap.");
+				}				
+				break;
+				
+			case JFileChooser.CANCEL_OPTION: //取り消し, ×ボタン
+				break;
+				
+			case JFileChooser.ERROR_OPTION: //エラー発生時
+				break;
+				
+			default:
+				break;				
 		}
 	}
 

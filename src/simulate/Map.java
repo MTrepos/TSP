@@ -1,8 +1,9 @@
 package simulate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Map {
+public class Map implements Serializable{
 
 	int mw, mh; //マップの大きさ
 	ArrayList<Location> locationList;
