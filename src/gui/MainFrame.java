@@ -3,6 +3,8 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,13 +21,15 @@ import javax.swing.JMenuItem;
 
 import simulate.Location;
 import simulate.Map;
+import simulate.Option;
 
-public class MainFrame extends JFrame implements ActionListener, MapMediator{
+public class MainFrame extends JFrame implements ActionListener, WindowListener, MapMediator{
 
 	private static final long serialVersionUID = 1L;
 	
 	//Model
 	Map map;
+	Option option;
 	
 	//View
 	JMenuBar menubar;
@@ -36,7 +40,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	
 	public MainFrame(){
 		//Modelの初期化
-		this.map = new Map(60, 45);
+		this.map = new Map(80, 60);
 		
 		//メインフレーム
 		this.setTitle("TSP");
@@ -106,6 +110,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		switch(command){
 		case "newMap":
 			System.out.println("newMap");
+			newMap();
 			this.mapPanel.repaint();
 			break;
 			
@@ -122,11 +127,19 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			
 		case "run":
 			System.out.println("run");
+			resolve();
 			break;
 			
 		default:
 			break;
 		}
+	}
+	
+	private void resolve(){
+		OptionFrame optionPanel = new OptionFrame();
+		optionPanel.setLocation
+		(this.getLocation().x + (this.getWidth()/2) - (optionPanel.getWidth()/2), 
+				this.getLocation().y + (this.getHeight()/2) - (optionPanel.getHeight()/2));
 	}
 	
 	private void saveMap(){
@@ -206,6 +219,19 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		}
 	}
 
+	private void newMap(){
+		//メインフレームを操作不可にしてcreateNewMapPanelの操作が終わるまで操作を移譲する
+		this.setEnabled(false);
+		
+		CreateNewMapPanel createNewMapPanel = new CreateNewMapPanel();
+		createNewMapPanel.setLocation
+		(this.getLocation().x + (this.getWidth()/2) - (createNewMapPanel.getWidth()/2), 
+				this.getLocation().y + (this.getHeight()/2) - (createNewMapPanel.getHeight()/2));
+		createNewMapPanel.setMapMediator(this);
+
+		createNewMapPanel.addWindowListener(this);
+	}
+	
 	@Override
 	public boolean existsLocation(Location l) {
 		return map.existsLocation(l);
@@ -220,6 +246,74 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	@Override
 	public ArrayList<Location> getLocationList() {
 		return map.getLocationList();
+	}
+
+	@Override
+	public void createNewMap(int mw, int mh) {
+		this.map = new Map(mw, mh);
+		this.mapPanel.repaint();
+	}
+
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	@Override
+	public void windowClosed(WindowEvent e) {
+		
+		String srcWindowName = e.getWindow().getName();
+		
+		switch(srcWindowName){
+			case "CreateNewMapFrame":
+				this.setEnabled(true); //操作を元に戻す
+				break;
+				
+			case "OptionFrame":
+				break;
+				
+			default:
+				break;
+		}
+		
+	}
+
+	
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

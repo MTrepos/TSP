@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,14 +9,17 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import simulate.Location;
 
 class MapPanel extends JPanel implements MouseListener{
 	
-	public static final int START_POINT_OFFSET = 10;
-	public static final int INTERVAL = 20;
+	public static final int VIEW_OFFSET = 10;
+	public static final int INTERVAL = 15;
 	private static final long serialVersionUID = 1L;
 	
 	MapMediator mapMediator;
@@ -23,10 +27,15 @@ class MapPanel extends JPanel implements MouseListener{
 	BufferedImage mapImage;
 	
 	public MapPanel(){
+		this.setLayout(new BorderLayout());
 		this.setVisible(true);
 		this.addMouseListener(this);
 		
 		this.mapImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_3BYTE_BGR);
+//		ImageIcon icon = new ImageIcon(mapImage);
+//		JLabel label = new JLabel(icon);
+//		JScrollPane scrollPane = new JScrollPane(label);
+//		add(scrollPane, BorderLayout.CENTER);
 	}	
 
 	@Override
@@ -43,8 +52,8 @@ class MapPanel extends JPanel implements MouseListener{
 			
 			ArrayList<Location> locationList = mapMediator.getLocationList();
 			for(Location l : locationList) {
-				int i = START_POINT_OFFSET + l.getPoint().x * INTERVAL;
-				int j = START_POINT_OFFSET + l.getPoint().y * INTERVAL;
+				int i = VIEW_OFFSET + l.getPoint().x * INTERVAL;
+				int j = VIEW_OFFSET + l.getPoint().y * INTERVAL;
 				switch(l.getType()){
 					case Location.TYPE_NORMAL_LOCATION:
 						ig2.setColor(Color.BLACK);
@@ -113,13 +122,13 @@ class MapPanel extends JPanel implements MouseListener{
 				//左クリック→経路地点化
 				case MouseEvent.BUTTON1:
 					mapMediator.setLocationType(l, Location.TYPE_PATH_LOCATION);
-					System.out.println("cahenged type : TYPE_PATH_LOCATION");
+					System.out.println("chaenged type : TYPE_PATH_LOCATION");
 					break;
 				
 				//右クリック→ノーマル地点化
 				case MouseEvent.BUTTON3:
 					mapMediator.setLocationType(l, Location.TYPE_NORMAL_LOCATION);
-					System.out.println("cahenged type : TYPE_NORMAL_LOCATION");
+					System.out.println("chaenged type : TYPE_NORMAL_LOCATION");
 					break;
 					
 				default:
