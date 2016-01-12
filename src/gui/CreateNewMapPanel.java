@@ -29,7 +29,7 @@ public class CreateNewMapPanel extends JFrame implements ActionListener{
 		this.setName("CreateNewMapFrame");
 		this.setLayout(new BorderLayout());
 		this.setSize(240, 180);
-		this.setVisible(true);
+		//this.setVisible(true);
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
