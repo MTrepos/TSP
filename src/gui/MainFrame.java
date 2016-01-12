@@ -13,8 +13,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -26,29 +28,33 @@ import simulate.Option;
 public class MainFrame extends JFrame implements ActionListener, WindowListener, MapMediator{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	//Model
 	Map map;
 	Option option;
-	
+
 	//View
 	JMenuBar menubar;
-	MapPanel mapPanel;
-	
+	MapPanel mapPanel; //ScrollPane
+	MapImage mapImage;
+
 	//Mediator
 	MapMediator mapMediator;
-	
+
 	public MainFrame(){
 		//Modelの初期化
 		this.map = new Map(80, 60);
-		
+
+		//Mediator
+		this.mapMediator = this;
+
 		//メインフレーム
 		this.setTitle("TSP");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
-		this.setBounds(100, 100, 1280, 720);
+		this.setBounds(500, 500, 640, 480);
 		this.setVisible(true);
-		
+
 		//メニューバー
 		this.menubar = new JMenuBar();
 
@@ -58,42 +64,36 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		itemNew.setActionCommand("newMap");
 		itemNew.addActionListener(this);
 		menuFile.add(itemNew);
-		
+
 		JMenuItem itemLoad = new JMenuItem("Load Map...");
 		itemLoad.setActionCommand("loadMap");
 		itemLoad.addActionListener(this);
 		menuFile.add(itemLoad);
-		
+
 		JMenuItem itemSave = new JMenuItem("Save Map...");
 		itemSave.setActionCommand("saveMap");
 		itemSave.addActionListener(this);
 		menuFile.add(itemSave);
-		
+
 		this.menubar.add(menuFile);
-		
+
 		JMenu menuRun  = new JMenu("Run");//実行メニュー
-		
+
 		JMenuItem itemRun = new JMenuItem("run");
 		itemRun.setActionCommand("run");
 		itemRun.addActionListener(this);
 		menuRun.add(itemRun);
-		
-		this.menubar.add(menuRun); 
-		
+
+		this.menubar.add(menuRun);
+
 		this.setJMenuBar(this.menubar);
-		
-		//マップパネル
-		this.mapPanel = new MapPanel();	
-		
-		this.add(mapPanel);
-		
+
+		//マップ
+		mapMediator.createNewMap(40, 20);
+
 		this.validate();
-		
-		//Mediator
-		this.mapMediator = this;
-		this.mapPanel.mapMediator = this;
 	}
-	
+
 	public static void main(String[] args) {
 		new MainFrame();
 	}
@@ -101,52 +101,52 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	public void setMapMediator(MapMediator mapMediator){
 		this.mapMediator = mapMediator;
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		String command = e.getActionCommand();
-		
+
 		switch(command){
 		case "newMap":
 			System.out.println("newMap");
 			newMap();
 			this.mapPanel.repaint();
 			break;
-			
+
 		case "loadMap":
 			System.out.println("loadMap");
 			loadMap();
 			this.mapPanel.repaint();
 			break;
-			
+
 		case "saveMap":
 			System.out.println("saveMap");
 			saveMap();
 			break;
-			
+
 		case "run":
 			System.out.println("run");
 			resolve();
 			break;
-			
+
 		default:
 			break;
 		}
 	}
-	
+
 	private void resolve(){
 		OptionFrame optionPanel = new OptionFrame();
 		optionPanel.setLocation
-		(this.getLocation().x + (this.getWidth()/2) - (optionPanel.getWidth()/2), 
+		(this.getLocation().x + (this.getWidth()/2) - (optionPanel.getWidth()/2),
 				this.getLocation().y + (this.getHeight()/2) - (optionPanel.getHeight()/2));
 	}
-	
+
 	private void saveMap(){
-		
+
 		JFileChooser fileChooser = new JFileChooser();
 		int selected =  fileChooser.showSaveDialog(this);
-		
+
 		switch(selected){
 			case JFileChooser.APPROVE_OPTION: //保存ボタン
 				//直列化して保存する
@@ -156,82 +156,82 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 					FileOutputStream fos = new FileOutputStream(saveFile);
 					ObjectOutputStream oos = new ObjectOutputStream(fos);
 					oos.writeObject(map);
-					
+
 					oos.flush();
-					
+
 					oos.close();
 					fos.close();
-					
+
 					System.out.println("system has saved tspmap...");
-				
+
 				}catch (IOException io){
 					System.out.println("IOException occured");
 				}
 				break;
-				
+
 			case JFileChooser.CANCEL_OPTION: //取り消し, ×ボタン
-				
+
 				break;
-				
+
 			case JFileChooser.ERROR_OPTION: //エラー発生時
 				break;
-				
+
 			default:
 				break;
 		}
 	}
-	
+
 	private void loadMap(){
 		JFileChooser fileChooser = new JFileChooser();
 		int selected = fileChooser.showOpenDialog(this);
-		
+
 		switch(selected){
 			case JFileChooser.APPROVE_OPTION: //開くボタンが選択された
 				//直列化されたファイルを読み込む
 				try{
 					File loadFile = fileChooser.getSelectedFile();
-					
+
 					FileInputStream fis = new FileInputStream(loadFile);
 					ObjectInputStream ois = new ObjectInputStream(fis);
 					this.map = (Map)ois.readObject();
-					
+
 					ois.close();
 					fis.close();
-					
+
 					System.out.println("system has loaded tspmap...");
-					
+
 				} catch(IOException e){
 					System.out.println("IOException occured");
-					
+
 				} catch(ClassNotFoundException cnfe){
 					System.out.println("maybe not tspmap.");
-				}				
+				}
 				break;
-				
+
 			case JFileChooser.CANCEL_OPTION: //取り消し, ×ボタン
 				break;
-				
+
 			case JFileChooser.ERROR_OPTION: //エラー発生時
 				break;
-				
+
 			default:
-				break;				
+				break;
 		}
 	}
 
 	private void newMap(){
 		//メインフレームを操作不可にしてcreateNewMapPanelの操作が終わるまで操作を移譲する
 		this.setEnabled(false);
-		
+
 		CreateNewMapPanel createNewMapPanel = new CreateNewMapPanel();
 		createNewMapPanel.setLocation
-		(this.getLocation().x + (this.getWidth()/2) - (createNewMapPanel.getWidth()/2), 
+		(this.getLocation().x + (this.getWidth()/2) - (createNewMapPanel.getWidth()/2),
 				this.getLocation().y + (this.getHeight()/2) - (createNewMapPanel.getHeight()/2));
 		createNewMapPanel.setMapMediator(this);
 
 		createNewMapPanel.addWindowListener(this);
 	}
-	
+
 	@Override
 	public boolean existsLocation(Location l) {
 		return map.existsLocation(l);
@@ -240,6 +240,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	@Override
 	public void setLocationType(Location l, int type) {
 		map.setLocationType(l, type);
+		this.mapImage.update();
 		this.mapPanel.repaint();
 	}
 
@@ -250,70 +251,92 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 	@Override
 	public void createNewMap(int mw, int mh) {
+		//Model
 		this.map = new Map(mw, mh);
-		this.mapPanel.repaint();
-	}
 
+		//View
+		if(mapPanel != null) remove(mapPanel);
+
+		int w = (MapImage.VIEW_OFFSET * 2) + (this.mapMediator.getMapWidth() * MapImage.DOT_PITCH);
+		int h = (MapImage.VIEW_OFFSET * 2) + (this.mapMediator.getMapHeight() * MapImage.DOT_PITCH);
+
+		this.mapImage = new MapImage(w, h);
+		this.mapImage.setMapMediator(this);
+		mapImage.update();
+
+		this.mapPanel = new MapPanel(new JLabel(new ImageIcon(this.mapImage)));
+		this.mapPanel.setMapMediator(this);
+
+		this.mapPanel.repaint();
+
+		this.add(mapPanel);
+	}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 	@Override
 	public void windowClosed(WindowEvent e) {
-		
+
 		String srcWindowName = e.getWindow().getName();
-		
+
 		switch(srcWindowName){
 			case "CreateNewMapFrame":
 				this.setEnabled(true); //操作を元に戻す
 				break;
-				
+
 			case "OptionFrame":
 				break;
-				
+
 			default:
 				break;
 		}
-		
+
 	}
 
-	
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 	@Override
 	public void windowDeiconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 	@Override
 	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 	@Override
 	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+
+	@Override
+	public int getMapWidth() {
+		return this.map.getMapWidth();
+	}
+
+
+	@Override
+	public int getMapHeight() {
+		return this.map.getMapHeight();
 	}
 
 }

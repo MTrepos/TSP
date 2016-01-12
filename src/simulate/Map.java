@@ -7,11 +7,11 @@ public class Map implements Serializable{
 
 	int mw, mh; //マップの大きさ
 	ArrayList<Location> locationList;
-	
+
 	public Map(int mw, int mh){
 		this.mw = mw;
 		this.mh = mh;
-		
+
 		//地点リストの初期化
 		this.locationList = new ArrayList<Location>(mw*mh);
 		for(int i=0; i<mw; i++){
@@ -20,11 +20,19 @@ public class Map implements Serializable{
 			}
 		}
 	}
-	
+
+	public int getMapWidth(){
+		return this.mw;
+	}
+
+	public int getMapHeight(){
+		return this.mh;
+	}
+
 	public ArrayList<Location> getLocationList(){
 		return this.locationList;
 	}
-	
+
 	public boolean existsLocation(Location l){
 		return locationList.contains(l);
 	}
@@ -41,11 +49,11 @@ public class Map implements Serializable{
 		}
 		System.out.println("out of range");
 	}
-	
+
 	private boolean isInRange(Location l){
 		int x = l.p.x;
 		int y = l.p.y;
 		return (x>=0) && (x<=mw) && (y>=0) && (y<=mh);
 	}
-	
+
 }
