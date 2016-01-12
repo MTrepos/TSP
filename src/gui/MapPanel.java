@@ -27,10 +27,8 @@ class MapPanel extends JScrollPane implements MouseListener{
 	public MapPanel(JLabel mapLabel){
 		super(mapLabel);
 		this.mapLabel = mapLabel;
-
 		this.setVisible(true);
-		LineBorder border = new LineBorder(Color.DARK_GRAY, 2, true);
-		this.setBorder(border);
+		this.setBorder(new LineBorder(Color.DARK_GRAY, 2, true));
 		this.addMouseListener(this);
 	}
 
@@ -46,21 +44,15 @@ class MapPanel extends JScrollPane implements MouseListener{
 		int y = e.getPoint().y;
 		System.out.println("Clicked (x, y) = (" + x + ", " + y + ")");
 
-		Point vp = this.getViewport().getViewPosition();
-		int vx = vp.x;
-		int vy = vp.y;
-		System.out.println("ViewPoint (x, y) = (" + vp.x + ", " + vp.y + ")");
-
-		Point mlp = this.mapLabel.getLocation();
-		int mlx = mlp.x;
-		int mly = mlp.y;
-		System.out.println("mapLabel Point (x, y) = (" + mlp.x + ", " + mlp.y + ")");
+		int bx = (this.getViewport().getWidth()/2) - (this.mapLabel.getIcon().getIconWidth()/2) -this.getViewport();
+		int by = (this.getViewport().getHeight()/2) - (this.mapLabel.getIcon().getIconHeight()/2);
+		System.out.println("BasePoint : (x, y) = (" + bx + ", " + by + ")");
 
 		int dp = MapImage.DOT_PITCH;
 		if( ((x%dp)<=8||(x%dp)>=7) && ((y%dp)<=8||(y%dp)>=7)){
 			int mx = x/dp;
 			int my = y/dp;
-			System.out.println("clicked map point: (" + mx + ", " + my + ")");
+			//System.out.println("clicked map point: (" + mx + ", " + my + ")");
 			Location l = new Location(mx, my, Location.TYPE_NORMAL_LOCATION);
 
 			switch(e.getButton()){

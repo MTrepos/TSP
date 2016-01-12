@@ -1,0 +1,24 @@
+//		System.out.println("Horizontal value : " + this.getHorizontalScrollBar().getValue());
+//		System.out.println("Vertical value : " + this.getVerticalScrollBar().getValue());
+
+//		Point vp = this.getViewport().getViewPosition();
+//		System.out.println("ViewPoint (x, y) = (" + vp.x + ", " + vp.y + ")");
+//
+//		Point mlp = this.mapLabel.getLocation();
+//		System.out.println("mapLabel Point (x, y) = (" + mlp.x + ", " + mlp.y + ")");
+//
+//		Point sp = this.getLocation();
+//		System.out.println("This ScrollPanel Point (x, y) = (" + sp.x + ", " + sp.y + ")");
+//
+//		Point imp = this.getMousePosition();
+//		System.out.println("In this Component Mouse Point (x, y) = (" + imp.x + ", " + imp.y + ")");
+
+		Dimension md = this.mapLabel.getSize();
+		System.out.println("mapLabel Size (w, h) = (" + md.width + ", " + md.height + ")");
+
+		Dimension vd = this.getViewport().getSize();
+		System.out.println("View Size (w, h) = (" + vd.width + ", " + vd.height + ")");
+
+		Point vp = this.getViewport().getLocation();
+		System.out.println("View Point (x, y) = (" + vp.x + ", " + vp.y + ")");
+

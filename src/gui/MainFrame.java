@@ -52,7 +52,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		this.setTitle("TSP");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
-		this.setBounds(500, 500, 640, 480);
+		this.setBounds(500, 200, 640, 480);
 		this.setVisible(true);
 
 		//メニューバー
@@ -89,7 +89,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		this.setJMenuBar(this.menubar);
 
 		//マップ
-		mapMediator.createNewMap(40, 20);
+		mapMediator.createNewMap(30, 20);
 
 		this.validate();
 	}
@@ -269,7 +269,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 		this.mapPanel.repaint();
 
-		this.add(mapPanel);
+		this.add(mapPanel, BorderLayout.CENTER);
 	}
 
 	@Override
