@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,7 +22,6 @@ import javax.swing.JMenuItem;
 
 import simulate.Location;
 import simulate.Map;
-import simulate.Option;
 
 public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
@@ -46,7 +46,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		this.setTitle("TSP");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
-		this.setBounds(500, 200, 800, 600);
+		this.setBounds(200, 100, 1200, 900);
 		this.setVisible(true);
 
 		//メニューバー
@@ -83,7 +83,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		this.setJMenuBar(this.menubar);
 
 		//マップ
-		mapMediator.createNewMap(20, 20);
+		mapMediator.createNewMap(75, 50);
 		this.validate();
 	}
 
@@ -96,10 +96,12 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	}
 
 	private void resolve(){
-		OptionFrame optionPanel = new OptionFrame();
-		optionPanel.setLocation
-		(this.getLocation().x + (this.getWidth()/2) - (optionPanel.getWidth()/2),
-				this.getLocation().y + (this.getHeight()/2) - (optionPanel.getHeight()/2));
+		Option option = GUIUtils.showOptionPane(this);
+		
+		if(option == null){
+			return;
+		}
+		
 	}
 
 	private void saveMap(){
@@ -180,15 +182,17 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	}
 
 	private void newMap(){
-
-		int[] wh = GUIUtils.showCreateNewMapOptionPane(this);
-
-		if(wh == null){
-			System.out.println("wh == null");
+		Dimension dimension = GUIUtils.showCreateNewMapOptionPane(this);
+		
+		if(dimension == null){
+			System.out.println("dimension == null");
 			return;
 		}
-
-		System.out.println("(w, h) = (" + wh[0] + ", " + wh[1] + ")");
+		
+		int w = dimension.width;
+		int h = dimension.height;
+		System.out.println("(w, h) = (" + w + ", " + h + ")");
+		this.mapMediator.createNewMap(w, h);
 	}
 
 	private void updateMapPanel(){
@@ -250,6 +254,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 		String command = e.getActionCommand();
 		System.out.println(command);
+		
 		switch(command){
 		case "newMap":
 			newMap();
