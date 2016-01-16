@@ -13,13 +13,12 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 
 import simulate.Location;
 import simulate.Map;
@@ -83,12 +82,15 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		this.setJMenuBar(this.menubar);
 
 		//マップパネル
+		JScrollPane jsPane = new JScrollPane();
 		this.mapPanel = new MapPanel();
 		this.mapPanel.setMapMediator(this);
-		this.add(this.mapPanel, BorderLayout.CENTER);
+		jsPane.setViewportView(this.mapPanel);
+		this.add(jsPane, BorderLayout.CENTER);
 		
 		//初期化作業
-		this.mapMediator.createNewMap(75, 50);
+		this.mapMediator.createNewMap(75, 75);
+		this.mapPanel.setSize();
 		this.mapPanel.repaint();
 		
 		this.validate();

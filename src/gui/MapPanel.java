@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -28,6 +29,12 @@ class MapPanel extends JScrollPane implements MouseListener{
 		this.mapMediator = mapMediator;
 	}
 
+	public void setSize(){
+		int w = (VIEW_OFFSET*2) + (mapMediator.getMapHeight() * DOT_PITCH);
+		int h = (VIEW_OFFSET*2) + (mapMediator.getMapHeight() * DOT_PITCH);
+		this.setPreferredSize(new Dimension(w, h));
+	}
+	
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
