@@ -10,10 +10,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import gui.algorithm.clustering.ClusteringAlgorithm;
-import gui.algorithm.clustering.Kmean;
-import gui.algorithm.tsp.DynamicProgramming;
-import gui.algorithm.tsp.TSPAlgorithm;
+import algorithm.clustering.ClusteringAlgorithm;
+import algorithm.clustering.Kmean;
+import algorithm.tsp.DynamicProgramming;
+import algorithm.tsp.TSPAlgorithm;
 
 public class GUIUtils {
 

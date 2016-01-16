@@ -10,12 +10,6 @@ import simulate.Location;
 
 class MapPanel extends JScrollPane implements MouseListener{
 
-	/**
-	 * MapPanel
-	 * マップ表示するための機能を提供するクラス
-	 *
-	 */
-
 	private static final long serialVersionUID = 1L;
 
 	JLabel mapLabel;
@@ -40,7 +34,7 @@ class MapPanel extends JScrollPane implements MouseListener{
 		Point ep = e.getPoint();
 		int x = e.getPoint().x + this.getHorizontalScrollBar().getValue();
 		int y = e.getPoint().y + this.getVerticalScrollBar().getValue();
-		System.out.println("Clicked (x, y) = (" + x + ", " + y + ")");
+		//System.out.println("Clicked (x, y) = (" + x + ", " + y + ")");
 
 /*		int bx = (this.getViewport().getWidth()/2) - (this.mapLabel.getIcon().getIconWidth()/2);
 		int by = (this.getViewport().getHeight()/2) - (this.mapLabel.getIcon().getIconHeight()/2);
@@ -57,13 +51,13 @@ class MapPanel extends JScrollPane implements MouseListener{
 				//左クリック→経路地点化
 				case MouseEvent.BUTTON1:
 					mapMediator.setLocationType(l, Location.TYPE_PATH_LOCATION);
-					System.out.println("changed type : TYPE_PATH_LOCATION");
+					//System.out.println("changed type : TYPE_PATH_LOCATION");
 					break;
 
 				//右クリック→ノーマル地点化
 				case MouseEvent.BUTTON3:
 					mapMediator.setLocationType(l, Location.TYPE_NORMAL_LOCATION);
-					System.out.println("changed type : TYPE_NORMAL_LOCATION");
+					//System.out.println("changed type : TYPE_NORMAL_LOCATION");
 					break;
 
 				default:

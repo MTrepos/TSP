@@ -1,7 +1,7 @@
 package gui;
 
-import gui.algorithm.clustering.ClusteringAlgorithm;
-import gui.algorithm.tsp.TSPAlgorithm;
+import algorithm.clustering.ClusteringAlgorithm;
+import algorithm.tsp.TSPAlgorithm;
 
 public class Option {
 	

@@ -1,4 +1,4 @@
-package gui.algorithm.tsp;
+package algorithm.tsp;
 
 public interface TSPAlgorithm {
 	public double calculate();

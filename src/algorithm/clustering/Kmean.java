@@ -1,4 +1,4 @@
-package gui.algorithm.clustering;
+package algorithm.clustering;
 
 public class Kmean implements ClusteringAlgorithm {
 

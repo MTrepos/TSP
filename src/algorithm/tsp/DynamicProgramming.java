@@ -1,4 +1,4 @@
-package gui.algorithm.tsp;
+package algorithm.tsp;
 
 public class DynamicProgramming implements TSPAlgorithm {
 
