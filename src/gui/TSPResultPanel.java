@@ -8,18 +8,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import simulate.Location;
 
-class MapPanel extends JScrollPane implements MouseListener{
+class TSPResultPanel extends JScrollPane implements MouseListener{
 
 	public static final int VIEW_OFFSET = 10;
 	public static final int DOT_PITCH = 15;
 
 	MapMediator mapMediator;
 
-	public MapPanel(){
+	public TSPResultPanel(){
 		this.setVisible(true);
 		this.addMouseListener(this);
 	}

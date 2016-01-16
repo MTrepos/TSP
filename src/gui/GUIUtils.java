@@ -81,11 +81,7 @@ public class GUIUtils {
 			ClusteringAlgorithm clusteringAlgorithm = clusteringMenu[clusteringComboBox.getSelectedIndex()];
 			TSPAlgorithm tspAlgorithm = TSPMenu[TSPComboBox.getSelectedIndex()];
 			
-				return new Option(
-						k,
-						clusteringAlgorithm,
-						tspAlgorithm
-					);
+			return new Option(k, clusteringAlgorithm, tspAlgorithm);
 		}
 
 	    return null;

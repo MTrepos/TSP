@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -34,7 +35,6 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	//View
 	JMenuBar menubar;
 	MapPanel mapPanel;
-	MapImage mapImage;
 
 	MapMediator mapMediator;
 
@@ -82,8 +82,15 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 		this.setJMenuBar(this.menubar);
 
-		//マップ
-		mapMediator.createNewMap(75, 50);
+		//マップパネル
+		this.mapPanel = new MapPanel();
+		this.mapPanel.setMapMediator(this);
+		this.add(this.mapPanel, BorderLayout.CENTER);
+		
+		//初期化作業
+		this.mapMediator.createNewMap(75, 50);
+		this.mapPanel.repaint();
+		
 		this.validate();
 	}
 
@@ -101,6 +108,11 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		if(option == null){
 			return;
 		}
+		
+		// 1. clustering
+		HashMap<Location, Integer> map = option.clusteringAlgorithm.cluster(mapMediator.getLocationList(), option.k);
+		
+		
 		
 	}
 
@@ -179,6 +191,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			default:
 				break;
 		}
+		this.mapPanel.repaint();
 	}
 
 	private void newMap(){
@@ -193,27 +206,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		int h = dimension.height;
 		System.out.println("(w, h) = (" + w + ", " + h + ")");
 		this.mapMediator.createNewMap(w, h);
-	}
-
-	private void updateMapPanel(){
-
-		if(mapPanel != null) remove(mapPanel);
-
-		int w = (MapImage.VIEW_OFFSET * 2) + (this.mapMediator.getMapWidth() * MapImage.DOT_PITCH);
-		int h = (MapImage.VIEW_OFFSET * 2) + (this.mapMediator.getMapHeight() * MapImage.DOT_PITCH);
-
-		this.mapImage = new MapImage(w, h);
-		this.mapImage.setMapMediator(this);
-		mapImage.update();
-
-		this.mapPanel = new MapPanel(new JLabel(new ImageIcon(this.mapImage)));
-		this.mapPanel.setMapMediator(this);
 		this.mapPanel.repaint();
-
-		this.add(mapPanel);
-
-		this.validate();
-		System.out.println("update MapPanel...");
 	}
 
 	@Override
@@ -224,8 +217,6 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	@Override
 	public void setLocationType(Location l, int type) {
 		map.setLocationType(l, type);
-		this.mapImage.update();
-		this.mapPanel.repaint();
 	}
 
 	@Override
@@ -236,7 +227,6 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	@Override
 	public void createNewMap(int mw, int mh) {
 		this.map = new Map(mw, mh);
-		updateMapPanel();
 	}
 
 	@Override
@@ -262,7 +252,6 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 		case "loadMap":
 			loadMap();
-			updateMapPanel();
 			break;
 
 		case "saveMap":

@@ -42,7 +42,7 @@ public class Map implements Serializable{
 			for(Location ll : locationList){
 				if(ll.equals(l)){
 					ll.type = type;
-					System.out.println("set TYPE_PATH_LOCATION : " + type);
+					//System.out.println("set TYPE_PATH_LOCATION : " + type);
 					return;
 				}
 			}
