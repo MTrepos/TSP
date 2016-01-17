@@ -9,7 +9,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import simulate.Location;
 
 class MapPanel extends JPanel implements MouseListener{
