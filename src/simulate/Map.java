@@ -28,9 +28,25 @@ public class Map implements Serializable{
 	public int getMapHeight(){
 		return this.dimension.height;
 	}
+	
+	public void setAllLocationNormal(){
+		for(Location l : this.locationList){
+			l.type = Location.TYPE_NORMAL_LOCATION;
+		}		
+	}
 
 	public ArrayList<Location> getLocationList(){
 		return this.locationList;
+	}
+	
+	public ArrayList<Location> getPathLocationList(){
+		ArrayList<Location> pathLocationList = new ArrayList<Location>();
+		for(Location l : this.locationList){
+			if(l.type == Location.TYPE_PATH_LOCATION){
+				pathLocationList.add(l);
+			}
+		}
+		return pathLocationList;
 	}
 
 	public boolean existsLocation(Location l){

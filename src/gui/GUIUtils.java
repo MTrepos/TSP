@@ -85,6 +85,31 @@ public class GUIUtils {
 		}
 
 	    return null;
+	}
+	
+	static int showGenerateRaondomLocationPane(Component parentComponent){
+
+        JPanel panel = new JPanel( new GridLayout(1, 1) );
+        panel.add( new JLabel("How many Locations : ") );
+        JTextField howManyLocationTextField = new JTextField(10);
+        panel.add( howManyLocationTextField );
+
+		int selected = JOptionPane.showConfirmDialog(
+				parentComponent,
+				panel,
+				"New Map...",
+				JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (selected == JOptionPane.OK_OPTION) {
+			try {
+				return Integer.valueOf(howManyLocationTextField.getText()).intValue();
+			} catch (NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(panel, "please input digits");
+			}
+		}
+
+	    return 0;
 	}	
 
 }

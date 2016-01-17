@@ -4,16 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import simulate.Location;
 
-class MapPanel extends JScrollPane implements MouseListener{
+class MapPanel extends JPanel implements MouseListener{
 
 	public static final int VIEW_OFFSET = 10;
 	public static final int DOT_PITCH = 15;
@@ -30,13 +29,13 @@ class MapPanel extends JScrollPane implements MouseListener{
 	}
 
 	public void setSize(){
-		int w = (VIEW_OFFSET*2) + (mapMediator.getMapHeight() * DOT_PITCH);
+		int w = (VIEW_OFFSET*2) + (mapMediator.getMapWidth() * DOT_PITCH);
 		int h = (VIEW_OFFSET*2) + (mapMediator.getMapHeight() * DOT_PITCH);
 		this.setPreferredSize(new Dimension(w, h));
 	}
 	
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 
 		g2.setBackground(Color.WHITE);
@@ -44,8 +43,7 @@ class MapPanel extends JScrollPane implements MouseListener{
 
 		// マップの描画
 		try {
-			if(mapMediator == null) return;
-			
+
 			ArrayList<Location> locationList = mapMediator.getLocationList();
 			for (Location l : locationList) {
 				int i = VIEW_OFFSET + l.getPoint().x * DOT_PITCH;
@@ -78,14 +76,9 @@ class MapPanel extends JScrollPane implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
-		Point ep = e.getPoint();
-		int x = e.getPoint().x + this.getHorizontalScrollBar().getValue();
-		int y = e.getPoint().y + this.getVerticalScrollBar().getValue();
+		int x = e.getPoint().x;
+		int y = e.getPoint().y;
 		//System.out.println("Clicked (x, y) = (" + x + ", " + y + ")");
-
-/*		int bx = (this.getViewport().getWidth()/2) - (this.mapLabel.getIcon().getIconWidth()/2);
-		int by = (this.getViewport().getHeight()/2) - (this.mapLabel.getIcon().getIconHeight()/2);
-		System.out.println("BasePoint : (x, y) = (" + bx + ", " + by + ")");*/
 
 		int dp = DOT_PITCH;
 		if( ((x%dp)<=8||(x%dp)>=7) && ((y%dp)<=8||(y%dp)>=7)){

@@ -12,9 +12,9 @@ public class Kmean implements ClusteringAlgorithm {
 	public HashMap<Location, Integer> cluster(ArrayList<Location> list, int k) {
 		
 		//make HashMap, and put initialize cluster
-		HashMap<Location, Integer> locationList = new HashMap<Location, Integer>(list.size());
+		HashMap<Location, Integer> locationMap = new HashMap<Location, Integer>(list.size());
 		for(int i=0; i<list.size(); i++){
-			locationList.put(list.get(i), i%k);
+			locationMap.put(list.get(i), i%k);
 		}
 		
 		//calculate means until beforeMeanPoints are same as meanPointList
@@ -24,17 +24,17 @@ public class Kmean implements ClusteringAlgorithm {
 			beforeMeanPoint = meanPoint;
 
 			// 2. calculate means
-			meanPoint = calcMeanPoints(locationList, k);
+			meanPoint = calcMeanPoints(locationMap, k);
 
-			// 3. re-classify nodes(Points) under its nearest mean
-			classify(locationList, k, meanPoint);
+			// 3. re-classify Points under its nearest mean
+			classify(locationMap, k, meanPoint);
 
 		} while(!isMeanPointSame(k, beforeMeanPoint, meanPoint));
 		
-		return null;
+		return locationMap;
 	}	
 	
-	private Point[] calcMeanPoints(HashMap<Location, Integer> locationList ,int k){
+	private Point[] calcMeanPoints(HashMap<Location, Integer> locationMap ,int k){
 
 		Point meanPoint[] = new Point[k];
 
@@ -47,8 +47,8 @@ public class Kmean implements ClusteringAlgorithm {
 			ySum[i] = 0;
 		}
 
-		for(Location l : locationList.keySet()){
-			int index = locationList.get(l);
+		for(Location l : locationMap.keySet()){
+			int index = locationMap.get(l);
 			elementNum[index]++;
 			xSum[index] += l.getPoint().x;
 			ySum[index] += l.getPoint().y;
@@ -70,8 +70,8 @@ public class Kmean implements ClusteringAlgorithm {
 		return meanPoint;
 	}
 
-	private void classify(HashMap<Location, Integer> locationList, int k, Point meanPoint[]){
-		for(Location l : locationList.keySet()){
+	private void classify(HashMap<Location, Integer> locationMap, int k, Point meanPoint[]){
+		for(Location l : locationMap.keySet()){
 			int nearestClusterIndex = 0;
 			double nearestClusterDistance = Double.MAX_VALUE;
 			for(int i=0; i<k; i++){
@@ -81,7 +81,7 @@ public class Kmean implements ClusteringAlgorithm {
 					nearestClusterDistance = distance;
 				}
 			}
-			locationList.put(l, nearestClusterIndex); //Overwrite cluster into nearest Point's cluster
+			locationMap.put(l, nearestClusterIndex); //Overwrite cluster into nearest Point's cluster
 		}
 	}
 

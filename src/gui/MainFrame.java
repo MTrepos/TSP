@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -11,7 +12,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -33,6 +36,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 	//View
 	JMenuBar menubar;
+	JScrollPane mapScrollPane;
 	MapPanel mapPanel;
 
 	MapMediator mapMediator;
@@ -45,8 +49,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		this.setTitle("TSP");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
-		this.setBounds(200, 100, 1200, 900);
-		this.setVisible(true);
+		this.setBounds(50, 50, 1300, 700);
 
 		//メニューバー
 		this.menubar = new JMenuBar();
@@ -69,6 +72,21 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		menuFile.add(itemSave);
 
 		this.menubar.add(menuFile);
+		
+		JMenu menuEdit  = new JMenu("Edit");//編集メニュー
+
+		JMenuItem itemGenerate = new JMenuItem("Generate random location...");
+		itemGenerate.setActionCommand("generate");
+		itemGenerate.addActionListener(this);
+		menuEdit.add(itemGenerate);
+		
+		JMenuItem itemClear = new JMenuItem("Clear Map...");
+		itemClear.setActionCommand("clearMap");
+		itemClear.addActionListener(this);
+		menuEdit.add(itemClear);		
+		
+		this.menubar.add(menuEdit);
+		this.setJMenuBar(this.menubar);		
 
 		JMenu menuRun  = new JMenu("Run");//実行メニュー
 
@@ -79,21 +97,21 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 		this.menubar.add(menuRun);
 
-		this.setJMenuBar(this.menubar);
-
 		//マップパネル
-		JScrollPane jsPane = new JScrollPane();
+		this.mapScrollPane = new JScrollPane();
 		this.mapPanel = new MapPanel();
 		this.mapPanel.setMapMediator(this);
-		jsPane.setViewportView(this.mapPanel);
-		this.add(jsPane, BorderLayout.CENTER);
+		this.mapScrollPane.setViewportView(this.mapPanel);
+		this.add(this.mapScrollPane, BorderLayout.CENTER);
 		
-		//初期化作業
-		this.mapMediator.createNewMap(75, 75);
+		//初期化
+		this.mapMediator.createNewMap(75, 40);
 		this.mapPanel.setSize();
 		this.mapPanel.repaint();
+		this.mapScrollPane.doLayout();
 		
 		this.validate();
+		this.setVisible(true);
 	}
 
 	public static void main(String[] args) {
@@ -111,11 +129,30 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			return;
 		}
 		
+		System.out.println("do");
+		
 		// 1. clustering
-		HashMap<Location, Integer> map = option.clusteringAlgorithm.cluster(mapMediator.getLocationList(), option.k);
+		HashMap<Location, Integer> map = option.clusteringAlgorithm.cluster(this.mapMediator.getPathLocationList(), option.k);
 		
+		// 2. tsp solution
 		
+		// 3. show result
+//		JFrame resultFrame = new JFrame("Result");
+//		resultFrame.setBounds(this.getLocation().x+50, this.getLocation().y+50, 1200, 700);
+//		resultFrame.setLayout(new BorderLayout());
+//		resultFrame.setVisible(true);
+//		
+//		JScrollPane jsPane = new JScrollPane();
+		TSPResultPanel tspResultPane = new TSPResultPanel(map);
+		tspResultPane.setMapMediator(this);
+		tspResultPane.setSize();
+//		jsPane.setViewportView(tspResultPane);
+//		jsPane.doLayout();
+//		resultFrame.add(jsPane);
+//		resultFrame.validate();
 		
+		this.mapScrollPane.setViewportView(tspResultPane);
+		this.mapScrollPane.doLayout();
 	}
 
 	private void saveMap(){
@@ -193,14 +230,15 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			default:
 				break;
 		}
+		this.mapPanel.setSize();
 		this.mapPanel.repaint();
+		this.mapScrollPane.doLayout();
 	}
 
 	private void newMap(){
 		Dimension dimension = GUIUtils.showCreateNewMapOptionPane(this);
 		
 		if(dimension == null){
-			System.out.println("dimension == null");
 			return;
 		}
 		
@@ -208,9 +246,34 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		int h = dimension.height;
 		System.out.println("(w, h) = (" + w + ", " + h + ")");
 		this.mapMediator.createNewMap(w, h);
+		this.mapPanel.setSize();
 		this.mapPanel.repaint();
+		this.mapScrollPane.doLayout();
 	}
 
+	private void clearMap(){
+		this.mapMediator.setAllLocationNormal();
+		this.mapPanel.repaint();
+	}
+	
+	private void generateRandomLocation(){
+		
+		int locations = GUIUtils.showGenerateRaondomLocationPane(this);
+		
+		ArrayList<Location> locationList = this.mapMediator.getLocationList();
+		
+		if((locations<1) ||(locations>locationList.size())){
+			return;
+		}
+		
+		Collections.shuffle(locationList);
+		for(int i=0; i<locations; i++){
+			this.mapMediator.setLocationType(locationList.get(i), Location.TYPE_PATH_LOCATION);
+		}
+		this.mapPanel.repaint();
+		
+	}
+	
 	@Override
 	public boolean existsLocation(Location l) {
 		return map.existsLocation(l);
@@ -220,12 +283,22 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	public void setLocationType(Location l, int type) {
 		map.setLocationType(l, type);
 	}
-
+	
+	@Override
+	public void setAllLocationNormal(){
+		this.map.setAllLocationNormal();
+	}
+	
 	@Override
 	public ArrayList<Location> getLocationList() {
 		return map.getLocationList();
 	}
 
+	@Override
+	public ArrayList<Location> getPathLocationList() {
+		return this.map.getPathLocationList();
+	}
+	
 	@Override
 	public void createNewMap(int mw, int mh) {
 		this.map = new Map(mw, mh);
@@ -259,7 +332,15 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		case "saveMap":
 			saveMap();
 			break;
-
+			
+		case "clearMap":
+			clearMap();
+			break;
+			
+		case "generate":
+			generateRandomLocation();
+			break;
+			
 		case "run":
 			resolve();
 			break;
@@ -268,5 +349,6 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			break;
 		}
 	}
+
 
 }
