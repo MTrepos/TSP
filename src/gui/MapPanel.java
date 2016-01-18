@@ -87,13 +87,13 @@ class MapPanel extends JPanel implements MouseListener{
 				//left click -> add location
 				case MouseEvent.BUTTON1:
 					mapMediator.addLocation(l);
-					System.out.println("add location : (" + mx + ", " + my + ")");
+					//System.out.println("add location : (" + mx + ", " + my + ")");
 					break;
 
 				//right click -> remove location
 				case MouseEvent.BUTTON3:
 					mapMediator.removeLocation(l);
-					System.out.println("remove location : (" + mx + ", " + my + ")");
+					//System.out.println("remove location : (" + mx + ", " + my + ")");
 					break;
 
 				default:

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -198,6 +199,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 								g2.setColor(COLORS[map.get(l)]);
 								g2.fillOval(x-3, y-3, 7, 7);
 							}
+							g2.dispose();
 						} catch (NullPointerException ne) {
 							ne.printStackTrace();
 						}
@@ -208,17 +210,51 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 				System.out.println("clustering has finished");
 
 				// 3. tsp
-				  // A. resolve tsp in background thread
+				  // ! -> resolve tsp each clusetr
+				for (int i=0; i<option.k; i++) {
+					// A. make same cluster list
+					ArrayList<Location> list = new ArrayList<Location>();
+					for(Location l : map.keySet()){
+						if(map.get(l) == i){
+							list.add(l);
+						}
+					}
 
+					// B. resolve tsp in background thread
+					option.tspAlgorithm.sort(list);
+
+					// C. show tsp result
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							try {
+								Graphics2D g2 = (Graphics2D)tspResultImage.getGraphics();
+
+								//g2.setColor(COLORS[i]);
+								for(int li=0; li<list.size()-1; li++){
+									Point p1 = list.get(li).getPoint();
+									Point p2 = list.get(li+1).getPoint();
+									g2.drawLine(p1.x, p1.y, p2.x, p2.y);
+								}
+
+								g2.dispose();
+							} catch (NullPointerException ne) {
+								ne.printStackTrace();
+							}
+							tspResultLabel.repaint();
+						}
+
+					});
+
+				}
+				System.out.println("clustering has finished");
 			}
 
 		}).start();
 
-
-		// 3. tsp solution;
-
 		// 4. release graphics & wait OK button clicked
-		//mapPanel.setEnabled(true);
+
 	}
 
 	private void saveMap(){
