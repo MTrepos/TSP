@@ -133,6 +133,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			return;
 		}
 
+		this.setEnabled(false);
 		// 1. make resultPanel
 		  // A. make Label
 		int w = (MapPanel.VIEW_OFFSET * 2) + (mapMediator.getMapWidth() * MapPanel.DOT_PITCH);
@@ -232,10 +233,16 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 								Graphics2D g2 = (Graphics2D)tspResultImage.getGraphics();
 
 								//g2.setColor(COLORS[i]);
+								g2.setColor(Color.BLACK);
 								for(int li=0; li<list.size()-1; li++){
 									Point p1 = list.get(li).getPoint();
 									Point p2 = list.get(li+1).getPoint();
-									g2.drawLine(p1.x, p1.y, p2.x, p2.y);
+									g2.drawLine(
+											MapPanel.VIEW_OFFSET + (p1.x * MapPanel.DOT_PITCH),
+											MapPanel.VIEW_OFFSET + (p1.y * MapPanel.DOT_PITCH),
+											MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH),
+											MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH)
+										);
 								}
 
 								g2.dispose();
@@ -248,7 +255,8 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 					});
 
 				}
-				System.out.println("clustering has finished");
+				System.out.println("tsp resolve has finished");
+
 			}
 
 		}).start();
@@ -346,6 +354,10 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 		int w = dimension.width;
 		int h = dimension.height;
+		
+		if((w<1) || (h<1)){
+			return;
+		}
 		//System.out.println("(w, h) = (" + w + ", " + h + ")");
 
 		this.mapMediator.createNewMap(w, h);

@@ -29,8 +29,8 @@ class MapPanel extends JPanel implements MouseListener{
 	}
 
 	public void setSize(){
-		int w = (VIEW_OFFSET*2) + (mapMediator.getMapWidth() * DOT_PITCH);
-		int h = (VIEW_OFFSET*2) + (mapMediator.getMapHeight() * DOT_PITCH);
+		int w = (VIEW_OFFSET*2) + ((mapMediator.getMapWidth()-1) * DOT_PITCH);
+		int h = (VIEW_OFFSET*2) + ((mapMediator.getMapHeight()-1) * DOT_PITCH);
 		this.setPreferredSize(new Dimension(w, h));
 	}
 
@@ -72,36 +72,37 @@ class MapPanel extends JPanel implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
-		int x = e.getPoint().x;
-		int y = e.getPoint().y;
+		int x = e.getPoint().x - VIEW_OFFSET;
+		int y = e.getPoint().y - VIEW_OFFSET;
 		//System.out.println("Clicked (x, y) = (" + x + ", " + y + ")");
 
 		int dp = DOT_PITCH;
-		if( ((x%dp)<=8||(x%dp)>=7) && ((y%dp)<=8||(y%dp)>=7)){
-			int mx = x/dp;
-			int my = y/dp;
-			//System.out.println("clicked map point: (" + mx + ", " + my + ")");
-			Location l = new Location(mx, my);
+		int mx = (x%dp>=Double.valueOf(dp*4/5).intValue()) ? (x/dp)+1 :
+					(x%dp<=Double.valueOf(dp*2/5).intValue()) ? (x/dp) : -1;
+		int my = (y%dp>=Double.valueOf(dp*4/5).intValue()) ? (y/dp)+1 :
+						(y%dp<=Double.valueOf(dp*2/5).intValue()) ? (y/dp) : -1;
+		System.out.println("map point: (" + mx + ", " + my + ")");
+		
+		Location l = new Location(mx, my);
 
-			switch(e.getButton()){
-				//left click -> add location
-				case MouseEvent.BUTTON1:
-					mapMediator.addLocation(l);
-					//System.out.println("add location : (" + mx + ", " + my + ")");
-					break;
+		switch(e.getButton()){
+			//left click -> add location
+			case MouseEvent.BUTTON1:
+				mapMediator.addLocation(l);
+				System.out.println("add location : (" + mx + ", " + my + ")");
+				break;
 
-				//right click -> remove location
-				case MouseEvent.BUTTON3:
-					mapMediator.removeLocation(l);
-					//System.out.println("remove location : (" + mx + ", " + my + ")");
-					break;
+			//right click -> remove location
+			case MouseEvent.BUTTON3:
+				mapMediator.removeLocation(l);
+				System.out.println("remove location : (" + mx + ", " + my + ")");
+				break;
 
-				default:
-					break;
-			}
-			this.repaint();
+			default:
+				break;
 		}
-
+		this.repaint();
+		
 	}
 
 	@Override

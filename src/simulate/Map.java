@@ -36,8 +36,10 @@ public class Map implements Serializable{
 
 	public boolean addLocation(Location l){
 		if(isInRange(l)){
-			this.locationList.add(l);
-			return true;
+			if(!locationList.contains(l)){
+				this.locationList.add(l);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -55,7 +57,7 @@ public class Map implements Serializable{
 		int y = l.p.y;
 		int w = this.dimension.width;
 		int h = this.dimension.height;
-		return (x>=0) && (x<=w) && (y>=0) && (y<=h);
+		return (x>=0) && (x<w) && (y>=0) && (y<h);
 	}
 
 }

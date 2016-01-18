@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import algorithm.clustering.ClusteringAlgorithm;
 import algorithm.clustering.Kmean;
 import algorithm.tsp.DynamicProgramming;
+import algorithm.tsp.GreedyMethod;
 import algorithm.tsp.TSPAlgorithm;
 
 public class GUIUtils {
@@ -65,7 +66,7 @@ public class GUIUtils {
 		panel.add(clusteringComboBox);
 		
 		panel.add(new JLabel("TSP algorithm"));
-		TSPAlgorithm TSPMenu[] = { new DynamicProgramming() };
+		TSPAlgorithm TSPMenu[] = { new DynamicProgramming(), new GreedyMethod() };
 		JComboBox<TSPAlgorithm> TSPComboBox = new JComboBox<TSPAlgorithm>(TSPMenu);
 		panel.add(TSPComboBox);
 		
