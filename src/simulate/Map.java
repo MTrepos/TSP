@@ -11,14 +11,7 @@ public class Map implements Serializable{
 
 	public Map(int w, int h){
 		this.dimension = new Dimension(w, h);
-
-		//地点リストの初期化
-		this.locationList = new ArrayList<Location>(w*h);
-		for(int i=0; i<w; i++){
-			for(int j=0; j<h; j++){
-				this.locationList.add(new Location(i, j, Location.TYPE_NORMAL_LOCATION));
-			}
-		}
+		this.locationList = new ArrayList<Location>();
 	}
 
 	public int getMapWidth(){
@@ -28,45 +21,36 @@ public class Map implements Serializable{
 	public int getMapHeight(){
 		return this.dimension.height;
 	}
-	
-	public void setAllLocationNormal(){
-		for(Location l : this.locationList){
-			l.type = Location.TYPE_NORMAL_LOCATION;
-		}		
+
+	public void clearLocation(){
+		this.locationList.clear();
 	}
 
 	public ArrayList<Location> getLocationList(){
 		return this.locationList;
-	}
-	
-	public ArrayList<Location> getPathLocationList(){
-		ArrayList<Location> pathLocationList = new ArrayList<Location>();
-		for(Location l : this.locationList){
-			if(l.type == Location.TYPE_PATH_LOCATION){
-				pathLocationList.add(l);
-			}
-		}
-		return pathLocationList;
 	}
 
 	public boolean existsLocation(Location l){
 		return locationList.contains(l);
 	}
 
-	public void setLocationType(Location l, int type) {
+	public boolean addLocation(Location l){
 		if(isInRange(l)){
-			for(Location ll : locationList){
-				if(ll.equals(l)){
-					ll.type = type;
-					//System.out.println("set TYPE_PATH_LOCATION : " + type);
-					return;
-				}
-			}
+			this.locationList.add(l);
+			return true;
 		}
-		System.out.println("out of range");
+		return false;
 	}
 
-	private boolean isInRange(Location l){
+	public boolean removeLocation(Location l){
+		if(isInRange(l)){
+			this.locationList.remove(l);
+			return true;
+		}
+		return false;
+	}
+
+ private boolean isInRange(Location l){
 		int x = l.p.x;
 		int y = l.p.y;
 		int w = this.dimension.width;

@@ -7,10 +7,10 @@ import simulate.Location;
 public interface MapMediator {
 	public int getMapWidth();
 	public int getMapHeight();
-	public void setAllLocationNormal();
+	public void clearLocation();
 	public ArrayList<Location> getLocationList();
-	public ArrayList<Location> getPathLocationList();
 	public boolean existsLocation(Location l);
-	public void setLocationType(Location l, int type);
+	public boolean addLocation(Location l);
+	public boolean removeLocation(Location l);
 	public void createNewMap(int mw, int mh);
 }

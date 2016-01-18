@@ -4,19 +4,20 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import algorithm.AlgorithmUtilities;
 import simulate.Location;
 
 public class Kmean implements ClusteringAlgorithm {
 
 	@Override
 	public HashMap<Location, Integer> cluster(ArrayList<Location> list, int k) {
-		
+
 		//make HashMap, and put initialize cluster
 		HashMap<Location, Integer> locationMap = new HashMap<Location, Integer>(list.size());
 		for(int i=0; i<list.size(); i++){
 			locationMap.put(list.get(i), i%k);
 		}
-		
+
 		//calculate means until beforeMeanPoints are same as meanPointList
 		Point meanPoint[] = null, beforeMeanPoint[] = null;
 		do {
@@ -30,10 +31,10 @@ public class Kmean implements ClusteringAlgorithm {
 			classify(locationMap, k, meanPoint);
 
 		} while(!isMeanPointSame(k, beforeMeanPoint, meanPoint));
-		
+
 		return locationMap;
-	}	
-	
+	}
+
 	private Point[] calcMeanPoints(HashMap<Location, Integer> locationMap ,int k){
 
 		Point meanPoint[] = new Point[k];
@@ -75,7 +76,7 @@ public class Kmean implements ClusteringAlgorithm {
 			int nearestClusterIndex = 0;
 			double nearestClusterDistance = Double.MAX_VALUE;
 			for(int i=0; i<k; i++){
-				double distance = calcDistance(l.getPoint(), meanPoint[i]);
+				double distance = AlgorithmUtilities.calcDistance(l.getPoint(), meanPoint[i]);
 				if(distance < nearestClusterDistance){
 					nearestClusterIndex = i;
 					nearestClusterDistance = distance;
@@ -83,10 +84,6 @@ public class Kmean implements ClusteringAlgorithm {
 			}
 			locationMap.put(l, nearestClusterIndex); //Overwrite cluster into nearest Point's cluster
 		}
-	}
-
-	private double calcDistance(Point p1, Point p2){
-		return Math.sqrt(Math.pow(p2.x-p1.x, 2) + Math.pow(p2.y-p1.y, 2));
 	}
 
 	private boolean isMeanPointSame(int k, Point beforeMeanPoint[], Point afterMeanPoint[]){
@@ -102,7 +99,7 @@ public class Kmean implements ClusteringAlgorithm {
 		}
 
 		return true;
-	}	
+	}
 	@Override
 	public String toString(){
 		return "Kmean";

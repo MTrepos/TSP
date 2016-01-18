@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
 import simulate.Location;
 
 class MapPanel extends JPanel implements MouseListener{
@@ -32,7 +33,7 @@ class MapPanel extends JPanel implements MouseListener{
 		int h = (VIEW_OFFSET*2) + (mapMediator.getMapHeight() * DOT_PITCH);
 		this.setPreferredSize(new Dimension(w, h));
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -40,29 +41,25 @@ class MapPanel extends JPanel implements MouseListener{
 		g2.setBackground(Color.WHITE);
 		g2.clearRect(0, 0, this.getWidth(), this.getHeight());
 
-		// マップの描画
+		//draw Map
 		try {
+			//dot
+			g2.setColor(Color.BLACK);
+			for(int i=0; i<this.mapMediator.getMapWidth(); i++){
+				for(int j=0; j<this.mapMediator.getMapHeight(); j++){
+					int x = VIEW_OFFSET + i * DOT_PITCH;
+					int y = VIEW_OFFSET + j * DOT_PITCH;
+					g2.fillRect(x, y, 1, 1);
+				}
+			}
 
+			//location
+			g2.setColor(Color.BLUE);
 			ArrayList<Location> locationList = mapMediator.getLocationList();
 			for (Location l : locationList) {
-				int i = VIEW_OFFSET + l.getPoint().x * DOT_PITCH;
-				int j = VIEW_OFFSET + l.getPoint().y * DOT_PITCH;
-				switch (l.getType()) {
-				case Location.TYPE_NORMAL_LOCATION:
-					g2.setColor(Color.BLACK);
-					g2.fillRect(i, j, 1, 1);
-					break;
-				case Location.TYPE_PATH_LOCATION:
-					g2.setColor(Color.BLUE);
-					g2.fillRect(i - 2, j - 2, 5, 5);
-					break;
-				case Location.TYPE_EXCLUDE_LOCATION:
-					g2.setColor(Color.RED);
-					g2.fillRect(i - 3, j - 3, 7, 7);
-					break;
-				default:
-					break;
-				}
+				int x = VIEW_OFFSET + l.getPoint().x * DOT_PITCH;
+				int y = VIEW_OFFSET + l.getPoint().y * DOT_PITCH;
+				g2.fillOval(x-2, y-2, 5, 5);
 			}
 
 		} catch (NullPointerException ne) {
@@ -84,19 +81,19 @@ class MapPanel extends JPanel implements MouseListener{
 			int mx = x/dp;
 			int my = y/dp;
 			//System.out.println("clicked map point: (" + mx + ", " + my + ")");
-			Location l = new Location(mx, my, Location.TYPE_NORMAL_LOCATION);
+			Location l = new Location(mx, my);
 
 			switch(e.getButton()){
-				//左クリック→経路地点化
+				//left click -> add location
 				case MouseEvent.BUTTON1:
-					mapMediator.setLocationType(l, Location.TYPE_PATH_LOCATION);
-					//System.out.println("changed type : TYPE_PATH_LOCATION");
+					mapMediator.addLocation(l);
+					System.out.println("add location : (" + mx + ", " + my + ")");
 					break;
 
-				//右クリック→ノーマル地点化
+				//right click -> remove location
 				case MouseEvent.BUTTON3:
-					mapMediator.setLocationType(l, Location.TYPE_NORMAL_LOCATION);
-					//System.out.println("changed type : TYPE_NORMAL_LOCATION");
+					mapMediator.removeLocation(l);
+					System.out.println("remove location : (" + mx + ", " + my + ")");
 					break;
 
 				default:
