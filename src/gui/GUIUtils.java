@@ -111,7 +111,7 @@ public class GUIUtils {
 		int selected = JOptionPane.showConfirmDialog(
 				parentComponent,
 				panel,
-				"New Map...",
+				"Generate Random Location...",
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 

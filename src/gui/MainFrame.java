@@ -237,18 +237,27 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 								//g2.setColor(COLORS[i]);
 								g2.setColor(Color.BLACK);
+								Point p1, p2;
 								for(int li=0; li<list.size()-1; li++){
-									Point p1 = list.get(li).getPoint();
-									Point p2 = list.get(li+1).getPoint();
+									p1 = list.get(li).getPoint();
+									p2 = list.get(li+1).getPoint();
 									g2.drawLine(
 											MapPanel.VIEW_OFFSET + (p1.x * MapPanel.DOT_PITCH),
 											MapPanel.VIEW_OFFSET + (p1.y * MapPanel.DOT_PITCH),
 											MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH),
 											MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH)
 										);
-									distance += AlgorithmUtilities.calcDistance(p1, p2);
 								}
-
+								p1 = list.get(list.size()-1).getPoint();
+								p2 = list.get(0).getPoint();
+								g2.drawLine(
+										MapPanel.VIEW_OFFSET + (p1.x * MapPanel.DOT_PITCH),
+										MapPanel.VIEW_OFFSET + (p1.y * MapPanel.DOT_PITCH),
+										MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH),
+										MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH)
+									);
+								
+								distance += AlgorithmUtilities.calcDistance(p1, p2);
 								g2.dispose();
 							} catch (NullPointerException ne) {
 								ne.printStackTrace();

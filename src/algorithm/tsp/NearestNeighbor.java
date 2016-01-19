@@ -15,12 +15,12 @@ public class NearestNeighbor implements TSPAlgorithm {
 			// 1. deceide Base Location
 			Location baseLocation = list.get(currentLocationIndex);
 
-			// 2. search nearest Location
+			// 2. search nearest Location from BaseLocation
 			int nearestLocationIndex = 0; //if nearest Location is found, this Index is updated..
 			double distanceBetweenBaseAndNearest = Double.MAX_VALUE;
 			for(int searchLocationIndex=currentLocationIndex+1; searchLocationIndex<list.size(); searchLocationIndex++){
 				double distance = AlgorithmUtilities.calcDistance(baseLocation.getPoint(), list.get(searchLocationIndex).getPoint());
-				System.out.println("distance(" + currentLocationIndex + ", " + searchLocationIndex + ") : " + distance);
+				//System.out.println("distance(" + currentLocationIndex + ", " + searchLocationIndex + ") : " + distance);
 				if(distance < distanceBetweenBaseAndNearest){
 					nearestLocationIndex = searchLocationIndex;
 					distanceBetweenBaseAndNearest = distance;
