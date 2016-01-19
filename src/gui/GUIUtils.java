@@ -12,9 +12,12 @@ import javax.swing.JTextField;
 
 import algorithm.clustering.ClusteringAlgorithm;
 import algorithm.clustering.Kmean;
-import algorithm.tsp.DynamicProgramming;
+import algorithm.clustering.RandomClustering;
 import algorithm.tsp.GreedyMethod;
+import algorithm.tsp.NearestNeighbor;
+import algorithm.tsp.RandomResolve;
 import algorithm.tsp.TSPAlgorithm;
+import algorithm.tsp.Watanabesan;
 
 public class GUIUtils {
 
@@ -48,7 +51,7 @@ public class GUIUtils {
 
 	    return null;
 	}
-	
+
 	static Option showOptionPane(Component parentComponent){
 
 		JPanel panel = new JPanel(new GridLayout(3, 3));
@@ -59,21 +62,31 @@ public class GUIUtils {
 		}
 		JComboBox<Integer> numbersComboBox = new JComboBox<Integer>(numbers);
 		panel.add(numbersComboBox);
-		
+
 		panel.add(new JLabel("clustering algorithm"));
-		ClusteringAlgorithm clusteringMenu[] = { new Kmean() };
+		// ! -> ADD NEW ALGORITHM HERE
+		ClusteringAlgorithm clusteringMenu[] = {
+				new Kmean(),
+				new RandomClustering()
+			};
 		JComboBox<ClusteringAlgorithm> clusteringComboBox = new JComboBox<ClusteringAlgorithm>(clusteringMenu);
 		panel.add(clusteringComboBox);
-		
+
 		panel.add(new JLabel("TSP algorithm"));
-		TSPAlgorithm TSPMenu[] = { new DynamicProgramming(), new GreedyMethod() };
+		// ! -> ADD NEW ALGORITHM HERE
+		TSPAlgorithm TSPMenu[] = {
+				new NearestNeighbor(),
+				new GreedyMethod(),
+				new Watanabesan(),
+				new RandomResolve()
+			};
 		JComboBox<TSPAlgorithm> TSPComboBox = new JComboBox<TSPAlgorithm>(TSPMenu);
 		panel.add(TSPComboBox);
-		
+
 		int selected = JOptionPane.showConfirmDialog(
-				parentComponent, 
-				panel, 
-				"Select TSP Options...", 
+				parentComponent,
+				panel,
+				"Select TSP Options...",
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
@@ -81,13 +94,13 @@ public class GUIUtils {
 			int k = numbers[numbersComboBox.getSelectedIndex()];
 			ClusteringAlgorithm clusteringAlgorithm = clusteringMenu[clusteringComboBox.getSelectedIndex()];
 			TSPAlgorithm tspAlgorithm = TSPMenu[TSPComboBox.getSelectedIndex()];
-			
+
 			return new Option(k, clusteringAlgorithm, tspAlgorithm);
 		}
 
 	    return null;
 	}
-	
+
 	static int showGenerateRaondomLocationPane(Component parentComponent){
 
         JPanel panel = new JPanel( new GridLayout(1, 1) );
@@ -111,6 +124,6 @@ public class GUIUtils {
 		}
 
 	    return 0;
-	}	
+	}
 
 }

@@ -43,8 +43,8 @@ class TSPResultPanel extends JPanel{
 
 
 	public void setSize(){
-		int w = (VIEW_OFFSET*2) + (mapMediator.getMapWidth() * DOT_PITCH);
-		int h = (VIEW_OFFSET*2) + (mapMediator.getMapHeight() * DOT_PITCH);
+		int w = (VIEW_OFFSET * 2) + (mapMediator.getMapWidth() * DOT_PITCH);
+		int h = (VIEW_OFFSET * 2) + (mapMediator.getMapHeight() * DOT_PITCH);
 		this.setPreferredSize(new Dimension(w, h));
 	}
 

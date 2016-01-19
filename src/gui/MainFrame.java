@@ -28,6 +28,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import algorithm.AlgorithmUtilities;
 import simulate.Location;
 import simulate.Map;
 
@@ -133,7 +134,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			return;
 		}
 
-		this.setEnabled(false);
+		//this.setEnabled(false);
 		// 1. make resultPanel
 		  // A. make Label
 		int w = (MapPanel.VIEW_OFFSET * 2) + (mapMediator.getMapWidth() * MapPanel.DOT_PITCH);
@@ -229,6 +230,8 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 						@Override
 						public void run() {
+
+							double distance = 0;
 							try {
 								Graphics2D g2 = (Graphics2D)tspResultImage.getGraphics();
 
@@ -243,6 +246,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 											MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH),
 											MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH)
 										);
+									distance += AlgorithmUtilities.calcDistance(p1, p2);
 								}
 
 								g2.dispose();
@@ -250,6 +254,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 								ne.printStackTrace();
 							}
 							tspResultLabel.repaint();
+							System.out.println("distance : " + distance);
 						}
 
 					});
@@ -354,7 +359,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 
 		int w = dimension.width;
 		int h = dimension.height;
-		
+
 		if((w<1) || (h<1)){
 			return;
 		}

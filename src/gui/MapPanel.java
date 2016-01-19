@@ -82,7 +82,7 @@ class MapPanel extends JPanel implements MouseListener{
 		int my = (y%dp>=Double.valueOf(dp*4/5).intValue()) ? (y/dp)+1 :
 						(y%dp<=Double.valueOf(dp*2/5).intValue()) ? (y/dp) : -1;
 		System.out.println("map point: (" + mx + ", " + my + ")");
-		
+
 		Location l = new Location(mx, my);
 
 		switch(e.getButton()){
@@ -102,7 +102,7 @@ class MapPanel extends JPanel implements MouseListener{
 				break;
 		}
 		this.repaint();
-		
+
 	}
 
 	@Override
