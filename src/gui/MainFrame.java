@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -25,8 +26,10 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
 
 import algorithm.AlgorithmUtilities;
 import simulate.Location;
@@ -139,13 +142,25 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		  // A. make Label
 		int w = (MapPanel.VIEW_OFFSET * 2) + (mapMediator.getMapWidth() * MapPanel.DOT_PITCH);
 		int h = (MapPanel.VIEW_OFFSET * 2) + (mapMediator.getMapHeight() * MapPanel.DOT_PITCH);
+
+		JFrame resultFrame = new JFrame("Result sp=" + option.k +
+				", clustering=" + option.clusteringAlgorithm +
+				", tsp=" + option.tspAlgorithm);
+		resultFrame.setBounds(this.getLocation().x + 50, this.getLocation().y + 50, w+100, h+100);
+		resultFrame.setLayout(new BorderLayout());
+		resultFrame.setVisible(true);
+		JScrollPane jsPane = new JScrollPane();
+		resultFrame.add(jsPane);
+		JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		resultFrame.add(statusBar, BorderLayout.SOUTH);
+		resultFrame.validate();
+
 		BufferedImage tspResultImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		JLabel tspResultLabel = new JLabel(new ImageIcon(tspResultImage));
 		tspResultLabel.setHorizontalAlignment(JLabel.LEFT);
 		tspResultLabel.setVerticalAlignment(JLabel.TOP);
 		tspResultLabel.setPreferredSize(new Dimension(w, h));
-		this.mapScrollPane.setViewportView(tspResultLabel);
-		this.mapScrollPane.doLayout();
 
 		  // B. draw Label
 		Graphics2D g2 = (Graphics2D)tspResultImage.getGraphics(); // ! -> g2 returns null until show something
@@ -176,6 +191,9 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			ne.printStackTrace();
 		}
 		g2.dispose();
+
+		jsPane.setViewportView(tspResultLabel);
+		jsPane.doLayout();
 
 		//-> use SwingWorker later
 		new Thread(new Runnable(){
@@ -238,31 +256,37 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 								//g2.setColor(COLORS[i]);
 								g2.setColor(Color.BLACK);
 								Point p1, p2;
+								int dx1, dy1, dx2, dy2;
 								for(int li=0; li<list.size()-1; li++){
 									p1 = list.get(li).getPoint();
 									p2 = list.get(li+1).getPoint();
-									g2.drawLine(
-											MapPanel.VIEW_OFFSET + (p1.x * MapPanel.DOT_PITCH),
-											MapPanel.VIEW_OFFSET + (p1.y * MapPanel.DOT_PITCH),
-											MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH),
-											MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH)
-										);
+									dx1 = MapPanel.VIEW_OFFSET + (p1.x * MapPanel.DOT_PITCH);
+									dy1 = MapPanel.VIEW_OFFSET + (p1.y * MapPanel.DOT_PITCH);
+									dx2 = MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH);
+									dy2 = MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH);
+									g2.drawLine(dx1, dy1, dx2, dy2);
+									g2.drawString(Integer.valueOf(li).toString(), dx1, dy1);
+									distance += AlgorithmUtilities.calcDistance(p1, p2);
 								}
-								p1 = list.get(list.size()-1).getPoint();
-								p2 = list.get(0).getPoint();
-								g2.drawLine(
-										MapPanel.VIEW_OFFSET + (p1.x * MapPanel.DOT_PITCH),
-										MapPanel.VIEW_OFFSET + (p1.y * MapPanel.DOT_PITCH),
-										MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH),
-										MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH)
-									);
-								
+
+								p1 = list.get(0).getPoint();
+								p2 = list.get(list.size()-1).getPoint();
+								dx1 = MapPanel.VIEW_OFFSET + (p1.x * MapPanel.DOT_PITCH);
+								dy1 = MapPanel.VIEW_OFFSET + (p1.y * MapPanel.DOT_PITCH);
+								dx2 = MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH);
+								dy2 = MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH);
+								g2.drawLine(dx1, dy1, dx2, dy2); //lastPoint to FirstPoint
+								g2.drawString(Integer.valueOf(list.size()-1).toString(), dx2, dy2); //LastPoint Number
+								g2.drawRect(dx1-5, dy1-5, 9, 9);
+								g2.drawRect(dx2-5, dy2-5, 9, 9);
 								distance += AlgorithmUtilities.calcDistance(p1, p2);
+
 								g2.dispose();
 							} catch (NullPointerException ne) {
 								ne.printStackTrace();
 							}
 							tspResultLabel.repaint();
+							resultFrame.setTitle(resultFrame.getTitle() + ", distance=" + distance);
 							System.out.println("distance : " + distance);
 						}
 
@@ -276,6 +300,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		}).start();
 
 		// 4. release graphics & wait OK button clicked
+
 
 	}
 
@@ -471,20 +496,17 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		}
 	}
 
-
 	@Override
 	public void clearLocation() {
 		this.map.clearLocation();
 
 	}
 
-
 	@Override
 	public boolean addLocation(Location l) {
 		this.map.addLocation(l);
 		return false;
 	}
-
 
 	@Override
 	public boolean removeLocation(Location l) {
