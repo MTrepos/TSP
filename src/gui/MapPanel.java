@@ -15,7 +15,7 @@ import simulate.Location;
 class MapPanel extends JPanel implements MouseListener{
 
 	public static final int VIEW_OFFSET = 10;
-	public static final int DOT_PITCH = 4;
+	public static final int DOT_PITCH = 12;
 
 	MapMediator mapMediator;
 

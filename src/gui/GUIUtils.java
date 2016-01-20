@@ -4,20 +4,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-import algorithm.clustering.ClusteringAlgorithm;
-import algorithm.clustering.Kmean;
-import algorithm.clustering.RandomClustering;
-import algorithm.tsp.GreedyMethod;
-import algorithm.tsp.NearestNeighbor;
-import algorithm.tsp.RandomResolve;
-import algorithm.tsp.TSPAlgorithm;
-import algorithm.tsp.Watanabesan;
+import algorithm.clustering.*;
+import algorithm.tsp.*;
 
 public class GUIUtils {
 
@@ -76,6 +66,7 @@ public class GUIUtils {
 		// ! -> ADD NEW ALGORITHM HERE
 		TSPAlgorithm TSPMenu[] = {
 				new NearestNeighbor(),
+				new TwoOpt(),
 				new GreedyMethod(),
 				new Watanabesan(),
 				new RandomResolve()
