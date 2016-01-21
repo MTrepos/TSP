@@ -265,7 +265,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 									dx2 = MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH);
 									dy2 = MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH);
 									g2.drawLine(dx1, dy1, dx2, dy2);
-									//g2.drawString(Integer.valueOf(li).toString(), dx1, dy1);
+									g2.drawString(Integer.valueOf(li).toString(), dx1, dy1);
 									distance += AlgorithmUtilities.calcDistance(p1, p2);
 								}
 
@@ -276,7 +276,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 								dx2 = MapPanel.VIEW_OFFSET + (p2.x * MapPanel.DOT_PITCH);
 								dy2 = MapPanel.VIEW_OFFSET + (p2.y * MapPanel.DOT_PITCH);
 								g2.drawLine(dx1, dy1, dx2, dy2); //lastPoint to FirstPoint
-								//g2.drawString(Integer.valueOf(list.size()-1).toString(), dx2, dy2); //LastPoint Number
+								g2.drawString(Integer.valueOf(list.size()-1).toString(), dx2, dy2); //LastPoint Number
 								g2.drawRect(dx1-5, dy1-5, 9, 9);
 								g2.drawRect(dx2-5, dy2-5, 9, 9);
 								distance += AlgorithmUtilities.calcDistance(p1, p2);
@@ -298,9 +298,6 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			}
 
 		}).start();
-
-		// 4. release graphics & wait OK button clicked
-
 
 	}
 

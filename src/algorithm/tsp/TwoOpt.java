@@ -37,16 +37,16 @@ public class TwoOpt implements TSPAlgorithm {
 
 				// B. if crossing, reverse between basePointP2 to comparedPointP1
 				if(AlgorithmUtilities.isIntersect(basePathP1, basePathP2, comparedPathP1, comparedPathP2)){
-					System.out.println("cross Path : " + basePathP1Index + "---" + basePathP2Index + " x " + comparedPathP1Index + "---" + comparedPathP2Index);
+					//System.out.println("cross Path : " + basePathP1Index + "---" + basePathP2Index + " x " + comparedPathP1Index + "---" + comparedPathP2Index);
 					ArrayList<Location> toReverseList = new ArrayList<Location>();
-					System.out.println("basePathP1Index : " + basePathP1Index);
-					System.out.println("basePathP2Index : " + basePathP2Index);
-					System.out.println("comparedPathP1Index : " + comparedPathP1Index);
-					System.out.println("comparedPathP2Index : " + comparedPathP2Index);
+//					System.out.println("basePathP1Index : " + basePathP1Index);
+//					System.out.println("basePathP2Index : " + basePathP2Index);
+//					System.out.println("comparedPathP1Index : " + comparedPathP1Index);
+//					System.out.println("comparedPathP2Index : " + comparedPathP2Index);
 					for(int k=basePathP2Index; k!=comparedPathP2Index; ++k, k=(k>=list.size() ? 0 : k)){
 						toReverseList.add(list.get(k));
 					}
-					System.out.println("reverse, size = " + toReverseList.size());
+					//System.out.println("reverse, size = " + toReverseList.size());
 					Collections.reverse(toReverseList);
 					// C. set reverseList
 					for(int l=basePathP2Index, m=0; l!=comparedPathP2Index; ++l, l=(l>=list.size() ? 0 :l),m++){
