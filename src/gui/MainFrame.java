@@ -112,7 +112,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 		this.add(this.mapScrollPane, BorderLayout.CENTER);
 
 		//初期化
-		this.mapMediator.createNewMap(75, 40);
+		this.mapMediator.createNewMap(105, 50);
 		this.mapPanel.setSize();
 		this.mapPanel.repaint();
 		this.mapScrollPane.doLayout();
@@ -137,7 +137,6 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 			return;
 		}
 
-		//this.setEnabled(false);
 		// 1. make resultPanel
 		  // A. make Label
 		int w = (MapPanel.VIEW_OFFSET * 2) + (mapMediator.getMapWidth() * MapPanel.DOT_PITCH);

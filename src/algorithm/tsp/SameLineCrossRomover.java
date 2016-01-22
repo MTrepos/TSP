@@ -21,28 +21,40 @@ public class SameLineCrossRomover implements TSPAlgorithm {
 			Point basePathP2 = list.get(basePathP2Index).getPoint();
 			Point basePathP3 = list.get(basePathP3Index).getPoint();
 
-			if(AlgorithmUtilities.isInSameLine(basePathP1, basePathP2, basePathP3)){
-				// 2. make list to reverse
-				ArrayList<Location> toReverseList = new ArrayList<Location>();
-
+			if(AlgorithmUtilities.isOnLine(basePathP1, basePathP3, basePathP2)){
+				// 2. search another same line path
 				int j=basePathP3Index;
-				while(true){
-					int tmpPathP1Index = j;
-					int tmpPathP2Index = ((j+1)>=list.size()) ? 0 : j+1;
-					Point tmpPathP1 = list.get(tmpPathP1Index).getPoint();
-					Point tmpPathP2 = list.get(tmpPathP2Index).getPoint();
+				int stopIndex = -1;
 
-					if(AlgorithmUtilities.isInSameLine(tmpPathP1, basePathP2, tmpPathP2)){
+				while(true){
+					int searchingPathP1Index = j;
+					int searchingPathP2Index = ((j+1)>=list.size()) ? 0 : j+1;
+					Point searchingPathP1 = list.get(searchingPathP1Index).getPoint();
+					Point searchingPathP2 = list.get(searchingPathP2Index).getPoint();
+
+					if(AlgorithmUtilities.isOnLine(searchingPathP1, searchingPathP2, basePathP2)){ //if found
+						stopIndex = searchingPathP1Index;
 						break;
 					}
-					toReverseList.add(list.get(j));
+
 					++j;
-					j=(j>=list.size() ? 0 : j);
+					j=(j>=list.size()) ? 0 : j;
+					if(searchingPathP2Index == basePathP1Index){ //if return to basePoint
+						break;
+					}
 				}
 
-				// 3. reverse toReverseList
-				Collections.reverse(toReverseList);
+				if(stopIndex != -1){
+					// 3. make list to reverse
+					ArrayList<Location> toReverseList = new ArrayList<Location>();
+					for(int k=basePathP2Index; k!=0; ++k, k=(k>=list.size() ? 0 : k)){
+						toReverseList.add(list.get(k));
+					}
+					toReverseList.add(list.get(j));
 
+					// 4. reverse toReverseList
+					Collections.reverse(toReverseList);
+				}
 
 			}
 

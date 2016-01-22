@@ -34,4 +34,22 @@ public class AlgorithmUtilities {
 		return ((p1.y * (p2.x - p3.x)) + (p2.y * (p3.x - p1.x)) + (p3.y * (p1.x - p2.x)) == 0);
 	}
 
+	/**
+	 * isOnLine
+	 * @param p1 : line start point
+	 * @param p2 : line end point
+	 * @param p3 : Judged point
+	 * @return
+	 */
+	public static boolean isOnLine(Point p1, Point p2, Point p3){
+		double L1 = Math.sqrt(Math.pow(p3.x-p1.x, 2) + Math.pow(p3.y-p1.y, 2));
+		double L2 = Math.sqrt(Math.pow(p2.x-p1.x, 2) + Math.pow(p2.y-p1.y, 2));
+
+		double j1 = ((p2.x-p1.x)*(p3.x-p1.x)) + ((p2.y-p1.y)*(p3.y-p1.y));
+		double j2 = L1*L2;
+		//System.out.println(j1);
+		//System.out.println(j2);
+		return (Math.abs(j1-j2)<=0.0001) && (L1>=L2);
+	}
+
 }

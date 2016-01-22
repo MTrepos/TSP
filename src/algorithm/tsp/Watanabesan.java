@@ -10,6 +10,8 @@ public class Watanabesan implements TSPAlgorithm {
 	@Override
 	public void sort(ArrayList<Location> list) {
 
+		System.out.println("isOnLine : " + AlgorithmUtilities.isOnLine(list.get(0).getPoint(), list.get(1).getPoint(), list.get(2).getPoint()));
+
 		// 1. find superior nn list
 		ArrayList<Location> nearestDistanceList = null;
 		double nearestDistance = Double.MAX_VALUE;
@@ -53,6 +55,8 @@ public class Watanabesan implements TSPAlgorithm {
 		for(int i=0; i<nearestDistanceList.size(); i++){
 			list.set(i, nearestDistanceList.get(i));
 		}
+
+		AlgorithmUtilities.isOnLine(list.get(0).getPoint(), list.get(1).getPoint(), list.get(2).getPoint());
 
 	}
 
