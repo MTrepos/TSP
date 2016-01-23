@@ -45,6 +45,7 @@ public class SameLineCrossRomover implements TSPAlgorithm {
 				}
 
 				if(stopIndex != -1){
+					System.out.println(basePathP2Index + "---" + stopIndex + "to reverse");
 					// 3. make list to reverse
 					ArrayList<Location> toReverseList = new ArrayList<Location>();
 					for(int k=basePathP2Index; k!=0; ++k, k=(k>=list.size() ? 0 : k)){
@@ -61,5 +62,10 @@ public class SameLineCrossRomover implements TSPAlgorithm {
 		}
 
 	}
+	
+	@Override
+	public String toString(){
+		return "SameLineCrossRemover";
+	}	
 
 }

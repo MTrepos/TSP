@@ -66,8 +66,6 @@ public class GUIUtils {
 		// ! -> ADD NEW ALGORITHM HERE
 		TSPAlgorithm TSPMenu[] = {
 				new NearestNeighbor(),
-				new TwoOpt(),
-				new GreedyMethod(),
 				new Watanabesan(),
 				new RandomResolve()
 			};
