@@ -49,10 +49,10 @@ public class Watanabesan implements TSPAlgorithm {
 			
 			if(is2Opt != null){ // 2. Apply 2-opt to nearestDistanceList
 				//System.out.println("is2Opt : (" + is2Opt.startIndex + ", " + is2Opt.endIndex + ")");
-				AlgorithmUtilities.reverse(nearestDistanceList, is2Opt.startIndex, is2Opt.endIndex);
+				AlgorithmUtilities.reverse(nearestDistanceList, is2Opt);
 			}else if(isOnLine != null){ // 3. remove SameLineCross & sort
-				System.out.println("isOnline : (" + isOnLine.startIndex + ", " + isOnLine.endIndex + ")");
-				AlgorithmUtilities.reverse(nearestDistanceList, isOnLine.startIndex, isOnLine.endIndex);
+				//System.out.println("isOnline : (" + isOnLine.startIndex + ", " + isOnLine.endIndex + ")");
+				AlgorithmUtilities.reverse(nearestDistanceList, isOnLine);
 			}else {
 				break;
 			}

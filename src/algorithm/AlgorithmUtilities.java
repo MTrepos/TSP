@@ -147,5 +147,9 @@ public class AlgorithmUtilities {
 			++l;
 		}			
 	}
+	
+	public static void reverse(ArrayList<Location> list, IndexSet is){
+		reverse(list, is.startIndex, is.endIndex);		
+	}	
 
 }
