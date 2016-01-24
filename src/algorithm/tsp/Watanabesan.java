@@ -11,7 +11,7 @@ public class Watanabesan implements TSPAlgorithm {
 	@Override
 	public void sort(ArrayList<Location> list) {
 
-		// 1. find superior NearestNeighbor list
+		// 1. find superior NearestNeighbor Path
 		ArrayList<Location> nearestDistanceList = null;
 		double nearestDistance = Double.MAX_VALUE;
 		NearestNeighbor nn = new NearestNeighbor();
@@ -30,7 +30,7 @@ public class Watanabesan implements TSPAlgorithm {
 			// C. sort & calc distance
 			nn.sort(tmpList);
 			double distance = AlgorithmUtilities.calcDistanceSum(tmpList);
-			System.out.println("(i ,distance) = (" + i + ", " + distance + ")");
+			//System.out.println("(i ,distance) = (" + i + ", " + distance + ")");
 
 			// D. compare
 			if(distance<nearestDistance){
@@ -67,7 +67,7 @@ public class Watanabesan implements TSPAlgorithm {
 
 	@Override
 	public String toString(){
-		return "Watanabe san Algorithm";
+		return "Watanabe-san Algorithm";
 	}
 
 }

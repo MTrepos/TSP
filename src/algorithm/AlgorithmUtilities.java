@@ -85,7 +85,7 @@ public class AlgorithmUtilities {
 
 				// 2. if intersected, return Path between basePointP2 to comparedPointP1
 				if(isIntersect(basePathP1, basePathP2, comparedPathP1, comparedPathP2)){
-					System.out.println("cross Path : " + basePathP1Index + "---" + basePathP2Index + " x " + comparedPathP1Index + "---" + comparedPathP2Index);
+					//System.out.println("cross Path : " + basePathP1Index + "---" + basePathP2Index + " x " + comparedPathP1Index + "---" + comparedPathP2Index);
 					return new IndexSet(basePathP2Index, comparedPathP1Index);
 				}
 			}

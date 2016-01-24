@@ -252,7 +252,6 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 							try {
 								Graphics2D g2 = (Graphics2D)tspResultImage.getGraphics();
 
-								//g2.setColor(COLORS[i]);
 								g2.setColor(Color.BLACK);
 								Point p1, p2;
 								int dx1, dy1, dx2, dy2;
@@ -460,7 +459,7 @@ public class MainFrame extends JFrame implements ActionListener, MapMediator{
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
-		System.out.println(command);
+		//System.out.println(command);
 
 		switch(command){
 		case "newMap":
