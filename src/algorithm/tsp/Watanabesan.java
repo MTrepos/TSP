@@ -42,11 +42,11 @@ public class Watanabesan implements TSPAlgorithm {
 
 //		System.out.println("nearestDistance = " + nearestDistance);
 //		System.out.println("nearestDistanceList's Sum = " + AlgorithmUtilities.calcDistanceSum(nearestDistanceList));
-		
+
 		while(true){
 			IndexSet is2Opt = AlgorithmUtilities.search2optIndex(nearestDistanceList);
 			IndexSet isOnLine = AlgorithmUtilities.searchIndexIntersectWithPath(nearestDistanceList);
-			
+
 			if(is2Opt != null){ // 2. Apply 2-opt to nearestDistanceList
 				//System.out.println("is2Opt : (" + is2Opt.startIndex + ", " + is2Opt.endIndex + ")");
 				AlgorithmUtilities.reverse(nearestDistanceList, is2Opt);
@@ -56,6 +56,24 @@ public class Watanabesan implements TSPAlgorithm {
 			}else {
 				break;
 			}
+		}
+
+		while(true){
+			IndexSet isToMove = AlgorithmUtilities.searchIndexToMoveToNearestLineSegamenta(nearestDistanceList);
+
+			if(isToMove != null){ // 2. Apply 2-opt to nearestDistanceList
+				System.out.println("Move " + isToMove.index1 + " to " + isToMove.index2);
+				AlgorithmUtilities.applyToMoveIndexSet(nearestDistanceList, isToMove);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO 自動生成された catch ブロック
+					e.printStackTrace();
+				}
+			}else {
+				break;
+			}
+
 		}
 
 		// 4. set nearestDistanceList to list
