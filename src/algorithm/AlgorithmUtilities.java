@@ -30,7 +30,7 @@ public class AlgorithmUtilities {
 	 * @return
 	 */
 	public static double calcDistanceBetweenPointAndLineSegmenta(Point p1, Point p2, Point p3){
-		double D = ((p3.x-p1.x)*(p2.y-p1.y)) - ((p3.y-p1.y)*(p2.x-p1.x));
+		double D = Math.abs(((p3.x-p1.x)*(p2.y-p1.y)) - ((p3.y-p1.y)*(p2.x-p1.x)));
 		double L = calcDistance(p1, p2);
 		double H = D/L;
 		if(dot(p1, p2, p3)<0) return calcDistance(p1, p3);
@@ -117,7 +117,7 @@ public class AlgorithmUtilities {
 
 				// 2. if intersected, return Path between basePointP2 to comparedPointP1
 				if(isIntersect(basePathP1, basePathP2, comparedPathP1, comparedPathP2)){
-					//System.out.println("cross Path : " + basePathP1Index + "---" + basePathP2Index + " x " + comparedPathP1Index + "---" + comparedPathP2Index);
+//					System.out.println("cross Path : " + basePathP1Index + "---" + basePathP2Index + " x " + comparedPathP1Index + "---" + comparedPathP2Index);
 					return new IndexSet(basePathP2Index, comparedPathP1Index);
 				}
 			}
@@ -143,7 +143,7 @@ public class AlgorithmUtilities {
 				}
 
 				if(AlgorithmUtilities.isOnLine(basePathP1, basePathP2, searchPoint)){
-					System.out.println("Point : " + searchPointIndex + " is on " + basePathP1Index + "---" + basePathP2Index);
+//					System.out.println("Point : " + searchPointIndex + " is on " + basePathP1Index + "---" + basePathP2Index);
 					return new IndexSet(basePathP2Index, searchPointIndex);
 				}
 
@@ -168,7 +168,7 @@ public class AlgorithmUtilities {
 			Point testPoint = list.get(testPointIndex).getPoint();
 			Point basePathP2 = list.get(basePathP2Index).getPoint();
 			double currentDistanceBetweenPointToLineSegmenta = calcDistanceBetweenPointAndLineSegmenta(basePathP1, basePathP2, testPoint);
-			System.out.println("lineSegmenta "+ basePathP1Index + "---" + basePathP2Index + " to " + testPointIndex + " disntance is " + currentDistanceBetweenPointToLineSegmenta);
+			//System.out.println("lineSegmenta "+ basePathP1Index + "---" + basePathP2Index + " to " + testPointIndex + " disntance is " + currentDistanceBetweenPointToLineSegmenta);
 			for (int searchIndex=0; searchIndex<list.size(); searchIndex++){
 				int comparedPathP1Index = searchIndex;
 				int comparedPathP2Index =((searchIndex+1)>=list.size()) ? 0 : searchIndex+1;
@@ -181,8 +181,16 @@ public class AlgorithmUtilities {
 					continue;
 				}
 				double comparedDistanceBetweenPointToLineSegmenta = calcDistanceBetweenPointAndLineSegmenta(comparedPathP1, comparedPathP2, testPoint);
-				System.out.println("lineSegmenta "+ comparedPathP1Index + "---" + comparedPathP2Index + " to " + testPointIndex + " disntance is " + comparedDistanceBetweenPointToLineSegmenta);
+				//System.out.println("lineSegmenta "+ comparedPathP1Index + "---" + comparedPathP2Index + " to " + testPointIndex + " disntance is " + comparedDistanceBetweenPointToLineSegmenta);
 				if(comparedDistanceBetweenPointToLineSegmenta<currentDistanceBetweenPointToLineSegmenta){
+//					System.out.println("lineSegmenta "+ basePathP1Index + "---" + basePathP2Index + " to " + testPointIndex + " disntance is " + currentDistanceBetweenPointToLineSegmenta);
+//					System.out.println("lineSegmenta "+ comparedPathP1Index + "---" + comparedPathP2Index + " to " + testPointIndex + " disntance is " + comparedDistanceBetweenPointToLineSegmenta);
+//					System.out.println("basePathP1 : " + basePathP1);
+//					System.out.println("basePathP2 : " + basePathP2);
+//					System.out.println("testPoint : " + testPoint);
+//					System.out.println("comparedPathP1" + comparedPathP1);
+//					System.out.println("comparedPathP2" + comparedPathP2);
+//					System.out.println("so, move");
 					return new IndexSet(testPointIndex, comparedPathP2Index);
 				}
 			}

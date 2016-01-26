@@ -45,35 +45,27 @@ public class Watanabesan implements TSPAlgorithm {
 
 		while(true){
 			IndexSet is2Opt = AlgorithmUtilities.search2optIndex(nearestDistanceList);
-			IndexSet isOnLine = AlgorithmUtilities.searchIndexIntersectWithPath(nearestDistanceList);
-
 			if(is2Opt != null){ // 2. Apply 2-opt to nearestDistanceList
-				//System.out.println("is2Opt : (" + is2Opt.startIndex + ", " + is2Opt.endIndex + ")");
+				//System.out.println("is2Opt : (" + is2Opt.index1 + ", " + is2Opt.index2 + ")");
 				AlgorithmUtilities.reverse(nearestDistanceList, is2Opt);
-			}else if(isOnLine != null){ // 3. remove SameLineCross & sort
-				//System.out.println("isOnline : (" + isOnLine.startIndex + ", " + isOnLine.endIndex + ")");
+				continue;
+			}
+
+			IndexSet isOnLine = AlgorithmUtilities.searchIndexIntersectWithPath(nearestDistanceList);
+			if(isOnLine != null){ // 3. remove SameLineCross & sort
+				//System.out.println("isOnline : (" + isOnLine.index1 + ", " + isOnLine.index2 + ")");
 				AlgorithmUtilities.reverse(nearestDistanceList, isOnLine);
-			}else {
-				break;
+				continue;
 			}
-		}
 
-		while(true){
 			IndexSet isToMove = AlgorithmUtilities.searchIndexToMoveToNearestLineSegamenta(nearestDistanceList);
-
 			if(isToMove != null){ // 2. Apply 2-opt to nearestDistanceList
-				System.out.println("Move " + isToMove.index1 + " to " + isToMove.index2);
+				//System.out.println("Move " + isToMove.index1 + " to " + isToMove.index2);
 				AlgorithmUtilities.applyToMoveIndexSet(nearestDistanceList, isToMove);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO 自動生成された catch ブロック
-					e.printStackTrace();
-				}
-			}else {
-				break;
+				continue;
 			}
 
+			break;
 		}
 
 		// 4. set nearestDistanceList to list
@@ -81,6 +73,15 @@ public class Watanabesan implements TSPAlgorithm {
 			list.set(i, nearestDistanceList.get(i));
 		}
 
+	}
+
+	private void sleep(long ms){
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
 	}
 
 	@Override
