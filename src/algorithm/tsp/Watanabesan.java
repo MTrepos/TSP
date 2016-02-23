@@ -11,7 +11,7 @@ public class Watanabesan implements TSPAlgorithm {
 	@Override
 	public void sort(ArrayList<Location> list) {
 
-		// 1. find superior NearestNeighbor Path
+		// 1. find shortest NearestNeighbor Algorithm Path
 		ArrayList<Location> nearestDistanceList = null;
 		double nearestDistance = Double.MAX_VALUE;
 		NearestNeighbor nn = new NearestNeighbor();
@@ -58,12 +58,12 @@ public class Watanabesan implements TSPAlgorithm {
 				continue;
 			}
 
-			IndexSet isToMove = AlgorithmUtilities.searchIndexToMoveToNearestLineSegamenta(nearestDistanceList);
-			if(isToMove != null){ // 2. Apply 2-opt to nearestDistanceList
-				//System.out.println("Move " + isToMove.index1 + " to " + isToMove.index2);
-				AlgorithmUtilities.applyToMoveIndexSet(nearestDistanceList, isToMove);
-				continue;
-			}
+//			IndexSet isToMove = AlgorithmUtilities.searchIndexToMoveToNearestLineSegamenta(nearestDistanceList);
+//			if(isToMove != null){ // 2. Apply 2-opt to nearestDistanceList
+//				//System.out.println("Move " + isToMove.index1 + " to " + isToMove.index2);
+//				AlgorithmUtilities.applyToMoveIndexSet(nearestDistanceList, isToMove);
+//				continue;
+//			}
 
 			break;
 		}
@@ -79,14 +79,13 @@ public class Watanabesan implements TSPAlgorithm {
 		try {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {
-			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public String toString(){
-		return "Watanabe-san Algorithm";
+		return "Remedy Algorithm";
 	}
 
 }
